@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import '../helpers/flights_database_helper.dart';
 import '../models/flight.dart';
-import '../services/database_helper.dart';
+import '../services/flights_database_helper.dart';
 
 class FlightProvider with ChangeNotifier {
   List<Flight> _flights = [];
@@ -15,8 +16,14 @@ class FlightProvider with ChangeNotifier {
 
   Future<void> addFlight(Flight flight) async {
     final id = await DatabaseHelper.instance.create(flight.toMap());
-    flight = Flight(id: id, ...flight);
-    _flights.add(flight);
+    final newFlight = Flight(
+      id: id,
+      departureCity: flight.departureCity,
+      destinationCity: flight.destinationCity,
+      departureTime: flight.departureTime,
+      arrivalTime: flight.arrivalTime,
+    );
+    _flights.add(newFlight);
     notifyListeners();
   }
 
@@ -32,4 +39,8 @@ class FlightProvider with ChangeNotifier {
     _flights.removeWhere((item) => item.id == id);
     notifyListeners();
   }
+}
+
+class DatabaseHelper {
+  static var instance;
 }

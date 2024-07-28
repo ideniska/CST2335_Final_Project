@@ -1,6 +1,7 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import '../models/airplane.dart';
+import '../models/customer.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
@@ -24,6 +25,9 @@ class DatabaseHelper {
     await db.execute(
       'CREATE TABLE airplanes(id INTEGER PRIMARY KEY, type TEXT, passengers INTEGER, maxSpeed REAL, range REAL)',
     );
+    await db.execute(
+      'CREATE TABLE customers(id INTEGER PRIMARY KEY, firstName TEXT, lastName TEXT, address TEXT, birthday TEXT)',
+    );
   }
 
   Future<int> insertAirplane(Airplane airplane) async {
@@ -45,5 +49,26 @@ class DatabaseHelper {
   Future<int> deleteAirplane(int id) async {
     Database db = await database;
     return await db.delete('airplanes', where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<int> insertCustomer(Customer customer) async {
+    Database db = await database;
+    return await db.insert('customers', customer.toMap());
+  }
+
+  Future<List<Customer>> getCustomers() async {
+    Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('customers');
+    return List.generate(maps.length, (i) => Customer.fromMap(maps[i]));
+  }
+
+  Future<int> updateCustomer(Customer customer) async {
+    Database db = await database;
+    return await db.update('customers', customer.toMap(), where: 'id = ?', whereArgs: [customer.id]);
+  }
+
+  Future<int> deleteCustomer(int id) async {
+    Database db = await database;
+    return await db.delete('customers', where: 'id = ?', whereArgs: [id]);
   }
 }

@@ -1,3 +1,5 @@
+import 'package:airplane_list/providers/customer_provider.dart';
+import 'package:airplane_list/screens/customer_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -16,6 +18,8 @@ void main() {
         ChangeNotifierProvider(create: (context) => AirplaneProvider()),
         // Provide LocaleProvider for managing app locale
         ChangeNotifierProvider(create: (context) => LocaleProvider()),
+        // Provide CustomerProvider for managing customer data
+        ChangeNotifierProvider(create: (context) => CustomerProvider()),
       ],
       child: MyApp(),
     ),
@@ -48,7 +52,7 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       // Set the home screen of the application
-      home: AirplaneListScreen(),
+      home: CustomerListScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

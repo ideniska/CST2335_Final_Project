@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/customer.dart';
 import '../providers/customer_provider.dart';
 import 'package:intl/intl.dart'; // For formatting the date
+import '../l10n/app_localizations.dart';
 
 class CustomerFormScreen extends StatefulWidget {
   final Customer? customer;
@@ -61,16 +62,16 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
       bool useData = await showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text('Use previous customer data?'),
-          content: Text('Do you want to reuse the data of the last customer you entered?'),
+          title: Text(AppLocalizations.of(context)?.translate('usePreviousData') ?? 'Use previous customer data?'),
+          content: Text(AppLocalizations.of(context)?.translate('reuseDataMessage') ?? 'Do you want to reuse the data of the last customer you entered?'),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
-              child: Text('No'),
+              child: Text(AppLocalizations.of(context)?.translate('no') ?? 'No'),
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(true),
-              child: Text('Yes'),
+              child: Text(AppLocalizations.of(context)?.translate('yes') ?? 'Yes'),
             ),
           ],
         ),
@@ -102,10 +103,11 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
   @override
   Widget build(BuildContext context) {
     final isEditing = widget.customer != null;
+    final localizations = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(isEditing ? 'Edit Customer' : 'Add Customer'),
+        title: Text(isEditing ? localizations.translate('editCustomer') ?? 'Edit Customer' : localizations.translate('addCustomer') ?? 'Add Customer'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -115,20 +117,20 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
             children: [
               TextFormField(
                 controller: _firstNameController,
-                decoration: InputDecoration(labelText: 'First Name'),
-                validator: (value) => value!.isEmpty ? 'Please enter a first name' : null,
+                decoration: InputDecoration(labelText: localizations.translate('firstName') ?? 'First Name'),
+                validator: (value) => value!.isEmpty ? localizations.translate('pleaseEnterFirstName') ?? 'Please enter a first name' : null,
                 onSaved: (value) => firstName = value!,
               ),
               TextFormField(
                 controller: _lastNameController,
-                decoration: InputDecoration(labelText: 'Last Name'),
-                validator: (value) => value!.isEmpty ? 'Please enter a last name' : null,
+                decoration: InputDecoration(labelText: localizations.translate('lastName') ?? 'Last Name'),
+                validator: (value) => value!.isEmpty ? localizations.translate('pleaseEnterLastName') ?? 'Please enter a last name' : null,
                 onSaved: (value) => lastName = value!,
               ),
               TextFormField(
                 controller: _addressController,
-                decoration: InputDecoration(labelText: 'Address'),
-                validator: (value) => value!.isEmpty ? 'Please enter an address' : null,
+                decoration: InputDecoration(labelText: localizations.translate('address') ?? 'Address'),
+                validator: (value) => value!.isEmpty ? localizations.translate('pleaseEnterAddress') ?? 'Please enter an address' : null,
                 onSaved: (value) => address = value!,
               ),
               GestureDetector(
@@ -149,10 +151,10 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
                   child: TextFormField(
                     controller: _birthdayController,
                     decoration: InputDecoration(
-                      labelText: 'Birthday',
+                      labelText: localizations.translate('birthday') ?? 'Birthday',
                       hintText: DateFormat.yMd().format(birthday),
                     ),
-                    validator: (value) => value!.isEmpty ? 'Please enter a birthday' : null,
+                    validator: (value) => value!.isEmpty ? localizations.translate('pleaseEnterBirthday') ?? 'Please enter a birthday' : null,
                     onSaved: (value) => birthday = DateFormat.yMd().parse(_birthdayController.text),
                   ),
                 ),
@@ -164,18 +166,18 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
                   if (isEditing) ...[
                     ElevatedButton(
                       onPressed: _updateCustomer,
-                      child: Text('Update'),
+                      child: Text(localizations.translate('update') ?? 'Update'),
                     ),
                     ElevatedButton(
                       onPressed: _deleteCustomer,
-                      child: Text('Delete'),
+                      child: Text(localizations.translate('delete') ?? 'Delete'),
                       style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                     ),
                   ],
                   if (!isEditing)
                     ElevatedButton(
                       onPressed: _submitCustomer,
-                      child: Text('Submit'),
+                      child: Text(localizations.translate('submit') ?? 'Submit'),
                     ),
                 ],
               ),

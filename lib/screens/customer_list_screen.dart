@@ -3,15 +3,17 @@ import 'package:provider/provider.dart';
 import '../providers/customer_provider.dart';
 import 'customer_form_screen.dart';
 import '../models/customer.dart';
+import '../l10n/app_localizations.dart';
 
 class CustomerListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final customerProvider = Provider.of<CustomerProvider>(context);
+    final localizations = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Customers'),
+        title: Text(localizations.translate('customers')!),
       ),
       body: ListView.builder(
         itemCount: customerProvider.customers.length,
@@ -19,7 +21,7 @@ class CustomerListScreen extends StatelessWidget {
           final customer = customerProvider.customers[index];
           return ListTile(
             title: Text('${customer.firstName} ${customer.lastName}'),
-            subtitle: Text(customer.address),
+            subtitle: Text(localizations.translate('address')! + ': ' + customer.address),
             onTap: () {
               Navigator.push(
                 context,

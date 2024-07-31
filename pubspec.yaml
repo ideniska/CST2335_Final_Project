@@ -69,6 +69,7 @@ flutter:
   assets:
     - assets/translations/ru.json
     - assets/translations/en.json
+    - assets/translations/es.json
 
   # To add assets to your application, add an assets section, like this:
   # assets:

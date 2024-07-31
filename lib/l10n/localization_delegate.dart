@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter/material.dart';
+
+
 class LocaleProvider extends ChangeNotifier {
   Locale _locale = Locale('en');
 
@@ -22,6 +25,7 @@ class L10n {
   static final all = [
     Locale('en'),
     Locale('ru'),
+    Locale('es'),
   ];
 
   static String getFlag(String code) {
@@ -30,6 +34,8 @@ class L10n {
         return '🇺🇸';
       case 'ru':
         return '🇷🇺';
+      case 'es':
+        return '🇪🇸';
       default:
         return '🏳';
     }

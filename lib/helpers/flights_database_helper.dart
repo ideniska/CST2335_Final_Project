@@ -1,35 +1,72 @@
-class Flight {
-  final int? id;
-  final String departureCity;
-  final String destinationCity;
-  final String departureTime;
-  final String arrivalTime;
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
 
-  Flight({
-    this.id,
-    required this.departureCity,
-    required this.destinationCity,
-    required this.departureTime,
-    required this.arrivalTime,
-  });
+class DatabaseHelper {
+  static final DatabaseHelper instance = DatabaseHelper._init();
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'departureCity': departureCity,
-      'destinationCity': destinationCity,
-      'departureTime': departureTime,
-      'arrivalTime': arrivalTime,
-    };
+  static Database? _database;
+
+  DatabaseHelper._init();
+
+  Future<Database> get database async {
+    if (_database != null) return _database!;
+
+    _database = await _initDB('flights.db');
+    return _database!;
   }
 
-  factory Flight.fromMap(Map<String, dynamic> map) {
-    return Flight(
-      id: map['id'],
-      departureCity: map['departureCity'],
-      destinationCity: map['destinationCity'],
-      departureTime: map['departureTime'],
-      arrivalTime: map['arrivalTime'],
+  Future<Database> _initDB(String filePath) async {
+    final dbPath = await getDatabasesPath();
+    final path = join(dbPath, filePath);
+
+    return await openDatabase(path, version: 1, onCreate: _createDB);
+  }
+
+  Future _createDB(Database db, int version) async {
+    await db.execute('''
+    CREATE TABLE flights (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      departureCity TEXT,
+      destinationCity TEXT,
+      departureTime TEXT,
+      arrivalTime TEXT
+    )
+    ''');
+    print("Database created successfully");
+  }
+
+  Future<int> create(Map<String, dynamic> data) async {
+    final db = await instance.database;
+    print("Creating flight: $data");
+    return await db.insert('flights', data);
+  }
+
+  Future<List<Map<String, dynamic>>> readAll() async {
+    final db = await instance.database;
+    print("Reading all flights");
+    return await db.query('flights');
+  }
+
+  Future<int> update(Map<String, dynamic> data) async {
+    final db = await instance.database;
+
+    final id = data['id'];
+    print("Updating flight with id $id: $data");
+    return await db.update(
+      'flights',
+      data,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<int> delete(int id) async {
+    final db = await instance.database;
+    print("Deleting flight with id $id");
+    return await db.delete(
+      'flights',
+      where: 'id = ?',
+      whereArgs: [id],
     );
   }
 }

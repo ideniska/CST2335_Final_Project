@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import '../helpers/flights_database_helper.dart';
 import '../models/flight.dart';
-import '../services/flights_database_helper.dart';
+import '../helpers//flights_database_helper.dart';
 
 class FlightProvider with ChangeNotifier {
   List<Flight> _flights = [];
@@ -39,8 +38,4 @@ class FlightProvider with ChangeNotifier {
     _flights.removeWhere((item) => item.id == id);
     notifyListeners();
   }
-}
-
-class DatabaseHelper {
-  static var instance;
 }

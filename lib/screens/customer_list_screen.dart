@@ -8,29 +8,43 @@ import '../l10n/app_localizations.dart';
 class CustomerListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final customerProvider = Provider.of<CustomerProvider>(context);
     final localizations = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.translate('customers')!),
       ),
-      body: ListView.builder(
-        itemCount: customerProvider.customers.length,
-        itemBuilder: (context, index) {
-          final customer = customerProvider.customers[index];
-          return ListTile(
-            title: Text('${customer.firstName} ${customer.lastName}'),
-            subtitle: Text(localizations.translate('address')! + ': ' + customer.address),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => CustomerFormScreen(customer: customer),
-                ),
-              );
-            },
-          );
+      body: FutureBuilder(
+        future: Provider.of<CustomerProvider>(context, listen: false).loadCustomers(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text(localizations.translate('errorLoadingCustomers')!));
+          } else {
+            return Consumer<CustomerProvider>(
+              builder: (context, customerProvider, child) {
+                return ListView.builder(
+                  itemCount: customerProvider.customers.length,
+                  itemBuilder: (context, index) {
+                    final customer = customerProvider.customers[index];
+                    return ListTile(
+                      title: Text('${customer.firstName} ${customer.lastName}'),
+                      subtitle: Text(localizations.translate('address')! + ': ' + customer.address),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CustomerFormScreen(customer: customer),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            );
+          }
         },
       ),
       floatingActionButton: FloatingActionButton(

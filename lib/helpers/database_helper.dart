@@ -2,6 +2,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import '../models/airplane.dart';
 import '../models/customer.dart';
+import '../models/reservation.dart';
 import '../models/flight.dart';
 
 class DatabaseHelper {
@@ -19,7 +20,7 @@ class DatabaseHelper {
 
   Future<Database> _initDatabase() async {
     String path = join(await getDatabasesPath(), 'airplanes.db');
-    return await openDatabase(path, version: 1, onCreate: _onCreate);
+    return await openDatabase(path, version: 2, onCreate: _onCreate, onUpgrade: _onUpgrade);
   }
 
   Future _onCreate(Database db, int version) async {
@@ -30,8 +31,19 @@ class DatabaseHelper {
       'CREATE TABLE customers(id INTEGER PRIMARY KEY, firstName TEXT, lastName TEXT, address TEXT, birthday TEXT)',
     );
     await db.execute(
+      'CREATE TABLE reservations(id INTEGER PRIMARY KEY AUTOINCREMENT, customerId INTEGER, flightId INTEGER, date TEXT, FOREIGN KEY (customerId) REFERENCES customers(id), FOREIGN KEY (flightId) REFERENCES airplanes(id))',
+    );
+    await db.execute(
       'CREATE TABLE flights(id INTEGER PRIMARY KEY AUTOINCREMENT, departureCity TEXT, destinationCity TEXT, departureTime TEXT, arrivalTime TEXT)',
     );
+  }
+
+  Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await db.execute(
+        'CREATE TABLE flights(id INTEGER PRIMARY KEY AUTOINCREMENT, departureCity TEXT, destinationCity TEXT, departureTime TEXT, arrivalTime TEXT)',
+      );
+    }
   }
 
   // Airplane methods
@@ -76,6 +88,28 @@ class DatabaseHelper {
   Future<int> deleteCustomer(int id) async {
     Database db = await database;
     return await db.delete('customers', where: 'id = ?', whereArgs: [id]);
+  }
+
+  // Reservation methods
+  Future<int> insertReservation(Reservation reservation) async {
+    Database db = await database;
+    return await db.insert('reservations', reservation.toMap());
+  }
+
+  Future<List<Reservation>> getReservations() async {
+    Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('reservations');
+    return List.generate(maps.length, (i) => Reservation.fromMap(maps[i]));
+  }
+
+  Future<int> updateReservation(Reservation reservation) async {
+    Database db = await database;
+    return await db.update('reservations', reservation.toMap(), where: 'id = ?', whereArgs: [reservation.id]);
+  }
+
+  Future<int> deleteReservation(int id) async {
+    Database db = await database;
+    return await db.delete('reservations', where: 'id = ?', whereArgs: [id]);
   }
 
   // Flight methods

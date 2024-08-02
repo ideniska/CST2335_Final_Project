@@ -14,6 +14,11 @@ class FlightProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<List<Flight>> listFlights() async {
+    return await DatabaseHelper().getFlights();
+    notifyListeners();
+  }
+
   Future<void> addFlight(Flight flight) async {
     final id = await DatabaseHelper().insertFlight(flight);
     final newFlight = Flight(

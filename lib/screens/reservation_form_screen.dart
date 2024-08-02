@@ -44,8 +44,8 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
     final customerProvider = Provider.of<CustomerProvider>(context, listen: false);
     final flightProvider = Provider.of<FlightProvider>(context, listen: false);
 
-    customers = await customerProvider.getCustomers() ?? [];
-    flights = await flightProvider.getFlights() ?? [];
+    customers = await customerProvider.listCustomers() ?? [];
+    flights = await flightProvider.listFlights() ?? [];
     setState(() {});
   }
 

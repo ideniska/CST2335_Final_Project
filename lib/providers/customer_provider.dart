@@ -11,6 +11,11 @@ class CustomerProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<List<Customer>> listCustomers() async {
+    return await DatabaseHelper().getCustomers();
+    notifyListeners();
+  }
+
   Future<void> addCustomer(Customer customer) async {
     await dbHelper.insertCustomer(customer);
     await loadCustomers();

@@ -1,3 +1,4 @@
+import 'package:airplane_list/screens/reservation_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -7,6 +8,7 @@ import 'providers/airplane_provider.dart';
 import 'providers/customer_provider.dart';
 import 'providers/flight_provider.dart';  // Import the FlightProvider
 import 'providers/locale_provider.dart';  // Import the LocaleProvider
+import 'providers/reservation_provider.dart';
 import 'screens/airplane_list_screen.dart';
 import 'screens/customer_list_screen.dart';
 import 'screens/flight_list_screen.dart';  // Import the FlightListScreen
@@ -19,6 +21,7 @@ void main() {
         ChangeNotifierProvider(create: (context) => CustomerProvider()),
         ChangeNotifierProvider(create: (context) => LocaleProvider()),
         ChangeNotifierProvider(create: (context) => FlightProvider()),
+        ChangeNotifierProvider(create: (context) => ReservationProvider()),
       ],
       child: MyApp(),
     ),
@@ -92,9 +95,12 @@ class MainScreen extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                // Placeholder button, you can add functionality here
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ReservationListScreen()),
+                );
               },
-              child: Text(AppLocalizations.of(context)?.translate('placeholderButton')?.replaceFirst('{0}', '4') ?? 'Placeholder Button 4'),
+              child: Text(AppLocalizations.of(context)?.translate('gotoReservationApp') ?? 'Go to Reservation App'),
             ),
           ],
         ),

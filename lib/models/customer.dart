@@ -7,6 +7,8 @@ class Customer {
 
   Customer({this.id, required this.firstName, required this.lastName, required this.address, required this.birthday});
 
+  String get fullName => '$firstName $lastName';
+
   Map<String, dynamic> toMap() {
     return {
       'id': id,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/flight.dart';
 import '../providers/flight_provider.dart';
+import '../l10n/app_localizations.dart';
 
 class FlightFormScreen extends StatefulWidget {
   final Flight? flight;
@@ -33,6 +34,7 @@ class _FlightFormScreenState extends State<FlightFormScreen> {
   }
 
   void _saveForm() {
+    final localizations = AppLocalizations.of(context);
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       final flight = Flight(
@@ -53,9 +55,10 @@ class _FlightFormScreenState extends State<FlightFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.flight == null ? 'Add Flight' : 'Edit Flight'),
+        title: Text(widget.flight == null ? localizations.translate('addFlight') ?? 'Add Flight' : localizations.translate('editFlight') ?? 'Edit Flight'),
         actions: [
           IconButton(
             icon: Icon(Icons.save),
@@ -71,11 +74,11 @@ class _FlightFormScreenState extends State<FlightFormScreen> {
             children: [
               TextFormField(
                 initialValue: _flightData['departureCity'],
-                decoration: InputDecoration(labelText: 'Departure City'),
+                decoration: InputDecoration(labelText: localizations.translate('departureCity') ?? 'Departure City'),
                 textInputAction: TextInputAction.next,
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please provide a value.';
+                    return localizations.translate('pleaseEnterDepartureCity') ?? 'Please provide a value.';
                   }
                   return null;
                 },
@@ -85,11 +88,11 @@ class _FlightFormScreenState extends State<FlightFormScreen> {
               ),
               TextFormField(
                 initialValue: _flightData['destinationCity'],
-                decoration: InputDecoration(labelText: 'Destination City'),
+                decoration: InputDecoration(labelText: localizations.translate('destinationCity') ?? 'Destination City'),
                 textInputAction: TextInputAction.next,
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please provide a value.';
+                    return localizations.translate('pleaseEnterDestinationCity') ?? 'Please provide a value.';
                   }
                   return null;
                 },
@@ -99,11 +102,11 @@ class _FlightFormScreenState extends State<FlightFormScreen> {
               ),
               TextFormField(
                 initialValue: _flightData['departureTime'],
-                decoration: InputDecoration(labelText: 'Departure Time'),
+                decoration: InputDecoration(labelText: localizations.translate('departureTime') ?? 'Departure Time'),
                 textInputAction: TextInputAction.next,
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please provide a value.';
+                    return localizations.translate('pleaseEnterDepartureTime') ?? 'Please provide a value.';
                   }
                   return null;
                 },
@@ -113,11 +116,11 @@ class _FlightFormScreenState extends State<FlightFormScreen> {
               ),
               TextFormField(
                 initialValue: _flightData['arrivalTime'],
-                decoration: InputDecoration(labelText: 'Arrival Time'),
+                decoration: InputDecoration(labelText: localizations.translate('arrivalTime') ?? 'Arrival Time'),
                 textInputAction: TextInputAction.done,
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please provide a value.';
+                    return localizations.translate('pleaseEnterArrivalTime') ?? 'Please provide a value.';
                   }
                   return null;
                 },

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../l10n/app_localizations.dart';
 import '../models/flight.dart';
 import '../providers/flight_provider.dart';
 import 'flight_form_screen.dart';
@@ -7,9 +8,10 @@ import 'flight_form_screen.dart';
 class FlightListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flights List'),
+        title: Text(localizations.translate('flights')!),
         actions: [
           IconButton(
             icon: Icon(Icons.add),
@@ -26,6 +28,9 @@ class FlightListScreen extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            // Highlighted: Use localized strings
+            return Center(child: Text(localizations.translate('errorLoadingFlights')!));
           } else {
             return Consumer<FlightProvider>(
               builder: (context, flightProvider, child) => ListView.builder(
@@ -39,7 +44,7 @@ class FlightListScreen extends StatelessWidget {
                       icon: Icon(Icons.delete),
                       onPressed: () {
                         Provider.of<FlightProvider>(context, listen: false).deleteFlight(flight.id!);
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Flight removed')));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(localizations.translate('flightRemoved')!)));
                       },
                     ),
                     onTap: () {

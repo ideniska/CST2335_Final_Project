@@ -2,6 +2,7 @@
   "mainMenu": "Main Menu",
   "goToAirplaneApp": "Go to Airplane App",
   "goToCustomerApp": "Go to Customer App",
+  "goToFlightListApp": "Go to Flight List App",
   "buttonPlaceholder": "Button {0} (Placeholder)",
   "airplanes": "Airplanes",
   "customers": "Customers",
@@ -37,5 +38,18 @@
   "pleaseEnterFirstName": "Please enter a first name",
   "pleaseEnterLastName": "Please enter a last name",
   "pleaseEnterAddress": "Please enter an address",
-  "pleaseEnterBirthday": "Please enter a birthday"
+  "pleaseEnterBirthday": "Please enter a birthday",
+  "flights": "Flights",
+  "addFlight": "Add Flight",
+  "editFlight": "Edit Flight",
+  "departureCity": "Departure City",
+  "destinationCity": "Destination City",
+  "departureTime": "Departure Time",
+  "arrivalTime": "Arrival Time",
+  "pleaseEnterDepartureCity": "Please enter a departure city",
+  "pleaseEnterDestinationCity": "Please enter a destination city",
+  "pleaseEnterDepartureTime": "Please enter a departure time",
+  "pleaseEnterArrivalTime": "Please enter an arrival time",
+  "errorLoadingFlights": "Error loading flights",
+  "flightRemoved": "Flight removed"
 }

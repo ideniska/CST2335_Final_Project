@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import '../helpers/database_helper.dart';
 import '../models/flight.dart';
-import '../helpers//flights_database_helper.dart';
+
 
 class FlightProvider with ChangeNotifier {
   List<Flight> _flights = [];
@@ -8,13 +9,13 @@ class FlightProvider with ChangeNotifier {
   List<Flight> get flights => _flights;
 
   Future<void> fetchFlights() async {
-    final dataList = await DatabaseHelper.instance.readAll();
-    _flights = dataList.map((item) => Flight.fromMap(item)).toList();
+    final dataList =  await DatabaseHelper().getFlights();
+    _flights = dataList;
     notifyListeners();
   }
 
   Future<void> addFlight(Flight flight) async {
-    final id = await DatabaseHelper.instance.create(flight.toMap());
+    final id = await DatabaseHelper().insertFlight(flight);
     final newFlight = Flight(
       id: id,
       departureCity: flight.departureCity,
@@ -27,14 +28,14 @@ class FlightProvider with ChangeNotifier {
   }
 
   Future<void> updateFlight(Flight flight) async {
-    await DatabaseHelper.instance.update(flight.toMap());
+    await DatabaseHelper().updateFlight(flight);
     final index = _flights.indexWhere((item) => item.id == flight.id);
     _flights[index] = flight;
     notifyListeners();
   }
 
   Future<void> deleteFlight(int id) async {
-    await DatabaseHelper.instance.delete(id);
+    await DatabaseHelper().deleteFlight(id);
     _flights.removeWhere((item) => item.id == id);
     notifyListeners();
   }

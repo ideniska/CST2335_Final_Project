@@ -2,6 +2,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import '../models/airplane.dart';
 import '../models/customer.dart';
+import '../models/flight.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
@@ -28,8 +29,12 @@ class DatabaseHelper {
     await db.execute(
       'CREATE TABLE customers(id INTEGER PRIMARY KEY, firstName TEXT, lastName TEXT, address TEXT, birthday TEXT)',
     );
+    await db.execute(
+      'CREATE TABLE flights(id INTEGER PRIMARY KEY AUTOINCREMENT, departureCity TEXT, destinationCity TEXT, departureTime TEXT, arrivalTime TEXT)',
+    );
   }
 
+  // Airplane methods
   Future<int> insertAirplane(Airplane airplane) async {
     Database db = await database;
     return await db.insert('airplanes', airplane.toMap());
@@ -51,6 +56,7 @@ class DatabaseHelper {
     return await db.delete('airplanes', where: 'id = ?', whereArgs: [id]);
   }
 
+  // Customer methods
   Future<int> insertCustomer(Customer customer) async {
     Database db = await database;
     return await db.insert('customers', customer.toMap());
@@ -70,5 +76,27 @@ class DatabaseHelper {
   Future<int> deleteCustomer(int id) async {
     Database db = await database;
     return await db.delete('customers', where: 'id = ?', whereArgs: [id]);
+  }
+
+  // Flight methods
+  Future<int> insertFlight(Flight flight) async {
+    Database db = await database;
+    return await db.insert('flights', flight.toMap());
+  }
+
+  Future<List<Flight>> getFlights() async {
+    Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('flights');
+    return List.generate(maps.length, (i) => Flight.fromMap(maps[i]));
+  }
+
+  Future<int> updateFlight(Flight flight) async {
+    Database db = await database;
+    return await db.update('flights', flight.toMap(), where: 'id = ?', whereArgs: [flight.id]);
+  }
+
+  Future<int> deleteFlight(int id) async {
+    Database db = await database;
+    return await db.delete('flights', where: 'id = ?', whereArgs: [id]);
   }
 }

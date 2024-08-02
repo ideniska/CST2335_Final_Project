@@ -2,6 +2,7 @@
   "mainMenu": "Главное меню",
   "goToAirplaneApp": "Перейти к приложению для самолетов",
   "goToCustomerApp": "Перейти к приложению для клиентов",
+  "goToFlightListApp": "Перейти к списку рейсов",
   "buttonPlaceholder": "Кнопка {0} (заполнитель)",
   "airplanes": "Самолеты",
   "customers": "Клиенты",
@@ -37,5 +38,18 @@
   "pleaseEnterFirstName": "Пожалуйста, введите имя",
   "pleaseEnterLastName": "Пожалуйста, введите фамилию",
   "pleaseEnterAddress": "Пожалуйста, введите адрес",
-  "pleaseEnterBirthday": "Пожалуйста, введите дату рождения"
+  "pleaseEnterBirthday": "Пожалуйста, введите дату рождения",
+  "flights": "Рейсы",
+  "addFlight": "Добавить рейс",
+  "editFlight": "Редактировать рейс",
+  "departureCity": "Город отправления",
+  "destinationCity": "Город назначения",
+  "departureTime": "Время отправления",
+  "arrivalTime": "Время прибытия",
+  "pleaseEnterDepartureCity": "Пожалуйста, введите город отправления",
+  "pleaseEnterDestinationCity": "Пожалуйста, введите город назначения",
+  "pleaseEnterDepartureTime": "Пожалуйста, введите время отправления",
+  "pleaseEnterArrivalTime": "Пожалуйста, введите время прибытия",
+  "errorLoadingFlights": "Ошибка загрузки рейсов",
+  "flightRemoved": "Рейс удален"
 }

@@ -2,6 +2,7 @@
   "mainMenu": "Menú Principal",
   "goToAirplaneApp": "Ir a la Aplicación de Avión",
   "goToCustomerApp": "Ir a la Aplicación de Cliente",
+  "goToFlightListApp": "Ir a la Lista de Vuelos",
   "buttonPlaceholder": "Botón {0} (Marcador de Posición)",
   "airplanes": "Aviones",
   "customers": "Clientes",
@@ -37,5 +38,18 @@
   "pleaseEnterFirstName": "Por favor ingrese un nombre",
   "pleaseEnterLastName": "Por favor ingrese un apellido",
   "pleaseEnterAddress": "Por favor ingrese una dirección",
-  "pleaseEnterBirthday": "Por favor ingrese una fecha de nacimiento"
+  "pleaseEnterBirthday": "Por favor ingrese una fecha de nacimiento",
+  "flights": "Vuelos",
+  "addFlight": "Agregar Vuelo",
+  "editFlight": "Editar Vuelo",
+  "departureCity": "Ciudad de Salida",
+  "destinationCity": "Ciudad de Destino",
+  "departureTime": "Hora de Salida",
+  "arrivalTime": "Hora de Llegada",
+  "pleaseEnterDepartureCity": "Por favor ingrese una ciudad de salida",
+  "pleaseEnterDestinationCity": "Por favor ingrese una ciudad de destino",
+  "pleaseEnterDepartureTime": "Por favor ingrese una hora de salida",
+  "pleaseEnterArrivalTime": "Por favor ingrese una hora de llegada",
+  "errorLoadingFlights": "Error al cargar los vuelos",
+  "flightRemoved": "Vuelo eliminado"
 }

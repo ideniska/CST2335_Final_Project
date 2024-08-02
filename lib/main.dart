@@ -60,6 +60,7 @@ class MainScreen extends StatelessWidget {
         title: Text(AppLocalizations.of(context)?.translate('mainMenu') ?? 'Main Menu'),
         actions: [
           buildLanguageDropdown(context),
+          buildInfoButton(context, AppLocalizations.of(context)!),
         ],
       ),
       body: Center(
@@ -124,6 +125,42 @@ class MainScreen extends StatelessWidget {
         );
       }).toList(),
       onChanged: (_) {},
+    );
+  }
+
+  IconButton buildInfoButton(BuildContext context, AppLocalizations localizations) {
+    return IconButton(
+      icon: Icon(Icons.info),
+      onPressed: () {
+        // Show a dialog with instructions
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(localizations.translate('instructions')!),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(localizations.translate('appInstruction1')!),
+                SizedBox(height: 8),
+                Text(localizations.translate('appInstruction2')!),
+                SizedBox(height: 8),
+                Text(localizations.translate('appInstruction3')!),
+                SizedBox(height: 8),
+                Text(localizations.translate('appInstruction4')!),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(localizations.translate('ok')!),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

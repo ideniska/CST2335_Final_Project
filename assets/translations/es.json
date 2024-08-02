@@ -26,8 +26,6 @@
   "reuseDataMessage": "¿Desea reutilizar los datos del último cliente que ingresó?",
   "no": "No",
   "yes": "Sí",
-  "instructions": "Instrucciones",
-  "appInstructions": "Aquí hay algunas instrucciones para usar la aplicación.",
   "ok": "OK",
   "firstName": "Nombre",
   "lastName": "Apellido",
@@ -51,5 +49,10 @@
   "pleaseEnterDepartureTime": "Por favor ingrese una hora de salida",
   "pleaseEnterArrivalTime": "Por favor ingrese una hora de llegada",
   "errorLoadingFlights": "Error al cargar los vuelos",
-  "flightRemoved": "Vuelo eliminado"
+  "flightRemoved": "Vuelo eliminado",
+  "instructions": "Instrucciones",
+  "appInstruction1": "Haga clic en la aplicación de avión para agregar nuevos aviones.",
+  "appInstruction2": "Haga clic en la aplicación de cliente para agregar un nuevo cliente.",
+  "appInstruction3": "Haga clic en la aplicación de lista de vuelos para agregar un nuevo vuelo.",
+  "appInstruction4": "Haga clic en la aplicación de reservación para crear una nueva reservación basada en los clientes y vuelos disponibles."
 }

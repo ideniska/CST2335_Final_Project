@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import '../providers/reservation_provider.dart';
 import '../models/reservation.dart';
 import '../l10n/app_localizations.dart';
-import '../screens/reservation_form_screen.dart';
+import 'reservation_form_screen.dart';
 
 class ReservationListScreen extends StatefulWidget {
   @override
@@ -41,19 +41,13 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
           ? Center(child: CircularProgressIndicator())
           : reservationProvider.reservations!.isEmpty
           ? Center(child: Text(localizations.translate('noReservations') ?? 'No Reservations'))
-          : ListView.builder(
-        itemCount: reservationProvider.reservations!.length,
-        itemBuilder: (context, index) {
-          final reservation = reservationProvider.reservations![index];
-          return ListTile(
-            title: Text('${reservation.customerId} - ${reservation.flightId}'),
-            subtitle: Text('${reservation.date.toLocal()}'), // Convert DateTime to readable format
-            onTap: () {
-              setState(() {
-                selectedReservation = reservation;
-              });
-            },
-          );
+          : LayoutBuilder(
+        builder: (context, constraints) {
+          if (constraints.maxWidth > 600) {
+            return buildTabletLayout(reservationProvider, localizations);
+          } else {
+            return buildMobileLayout(reservationProvider, localizations);
+          }
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -64,6 +58,96 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
           );
         },
         child: Icon(Icons.add),
+      ),
+    );
+  }
+
+  Widget buildTabletLayout(ReservationProvider reservationProvider, AppLocalizations localizations) {
+    return Row(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            itemCount: reservationProvider.reservations!.length,
+            itemBuilder: (context, index) {
+              final reservation = reservationProvider.reservations![index];
+              return ListTile(
+                title: Text('${reservation.customerId} - ${reservation.flightId}'),
+                subtitle: Text('${reservation.date.toLocal()}'),
+                onTap: () {
+                  setState(() {
+                    selectedReservation = reservation;
+                  });
+                },
+              );
+            },
+          ),
+        ),
+        if (selectedReservation != null)
+          Expanded(
+            child: ReservationDetail(reservation: selectedReservation!),
+          ),
+      ],
+    );
+  }
+
+  Widget buildMobileLayout(ReservationProvider reservationProvider, AppLocalizations localizations) {
+    return ListView.builder(
+      itemCount: reservationProvider.reservations!.length,
+      itemBuilder: (context, index) {
+        final reservation = reservationProvider.reservations![index];
+        return ListTile(
+          title: Text('${reservation.customerId} - ${reservation.flightId}'),
+          subtitle: Text('${reservation.date.toLocal()}'),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ReservationFormScreen(reservation: reservation),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+class ReservationDetail extends StatelessWidget {
+  final Reservation reservation;
+
+  const ReservationDetail({required this.reservation});
+
+  @override
+  Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+
+    return Card(
+      margin: EdgeInsets.all(16.0),
+      child: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Reservation ID: ${reservation.id}', style: Theme.of(context).textTheme.headline6),
+            SizedBox(height: 8.0),
+            Text('${localizations.translate('customerId')}: ${reservation.customerId}'),
+            Text('${localizations.translate('flightId')}: ${reservation.flightId}'),
+            Text('${localizations.translate('date')}: ${reservation.date.toLocal()}'),
+            Text('${localizations.translate('name')}: ${reservation.name}'),
+            SizedBox(height: 20.0),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ReservationFormScreen(reservation: reservation),
+                  ),
+                );
+              },
+              child: Text(localizations.translate('edit')!),
+            ),
+          ],
+        ),
       ),
     );
   }

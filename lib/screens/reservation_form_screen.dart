@@ -22,7 +22,7 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
   late int customerId;
   late int flightId;
   late DateTime date;
-  late String name; // New field for reservation name
+  late String name;
   List<Customer> customers = [];
   List<Flight> flights = [];
 
@@ -69,41 +69,63 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
-        child: Form(
-          key: formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                initialValue: name,
-                decoration: InputDecoration(labelText: localizations.translate('name') ?? 'Name'),
-                onSaved: (value) => name = value ?? '',
-                validator: (value) => value!.isEmpty ? localizations.translate('pleaseEnterName') ?? 'Please enter a name' : null,
+        child: Column(
+          children: [
+            Expanded(
+              child: Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      initialValue: name,
+                      decoration: InputDecoration(labelText: localizations.translate('name') ?? 'Name'),
+                      onSaved: (value) => name = value ?? '',
+                      validator: (value) => value!.isEmpty ? localizations.translate('pleaseEnterName') ?? 'Please enter a name' : null,
+                    ),
+                    buildDropdownField(
+                      localizations,
+                      'customers',
+                      customers,
+                          (Customer? value) {
+                        customerId = value?.id ?? 0;
+                      },
+                          (Customer? value) => value != null ? value.fullName : '',
+                      validator: (value) => value == null ? localizations.translate('pleaseSelectCustomer') ?? 'Please select a customer' : null,
+                    ),
+                    buildDropdownField(
+                      localizations,
+                      'flights',
+                      flights,
+                          (Flight? value) {
+                        flightId = value?.id ?? 0;
+                      },
+                          (Flight? value) => value != null ? '${value.departureCity} to ${value.destinationCity}' : '',
+                      validator: (value) => value == null ? localizations.translate('pleaseSelectFlight') ?? 'Please select a flight' : null,
+                    ),
+                    buildDatePicker(localizations),
+                    SizedBox(height: 20),
+                    buildSubmitButton(context, localizations),
+                    if (widget.reservation != null) ...[
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          final reservationProvider = Provider.of<ReservationProvider>(context, listen: false);
+                          if (widget.reservation?.id != null) {
+                            reservationProvider.deleteReservation(widget.reservation!.id!);
+                            Navigator.pop(context);
+                          }
+                        },
+                        child: Text(localizations.translate('delete') ?? 'Delete'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red, // Color for the delete button
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
               ),
-              buildDropdownField(
-                localizations,
-                'customers',
-                customers,
-                    (Customer? value) {
-                  customerId = value?.id ?? 0;
-                },
-                    (Customer? value) => value != null ? value.fullName : '',
-                validator: (value) => value == null ? localizations.translate('pleaseSelectCustomer') ?? 'Please select a customer' : null,
-              ),
-              buildDropdownField(
-                localizations,
-                'flights',
-                flights,
-                    (Flight? value) {
-                  flightId = value?.id ?? 0;
-                },
-                    (Flight? value) => value != null ? '${value.departureCity} to ${value.destinationCity}' : '',
-                validator: (value) => value == null ? localizations.translate('pleaseSelectFlight') ?? 'Please select a flight' : null,
-              ),
-              buildDatePicker(localizations),
-              SizedBox(height: 20),
-              buildSubmitButton(context, localizations),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -173,12 +195,15 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
             customerId: customerId,
             flightId: flightId,
             date: date,
-            name: name, // Include the new name field
+            name: name,
           );
+          final reservationProvider = Provider.of<ReservationProvider>(context, listen: false);
           if (widget.reservation != null) {
-            await Provider.of<ReservationProvider>(context, listen: false).updateReservation(reservation);
+            if (reservation.id != null) {
+              await reservationProvider.updateReservation(reservation);
+            }
           } else {
-            await Provider.of<ReservationProvider>(context, listen: false).addReservation(reservation);
+            await reservationProvider.addReservation(reservation);
           }
           Navigator.of(context).pop();
         }

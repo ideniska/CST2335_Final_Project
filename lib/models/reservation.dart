@@ -3,8 +3,15 @@ class Reservation {
   final int customerId;
   final int flightId;
   final DateTime date;
+  final String name; // New field for reservation name
 
-  Reservation({this.id, required this.customerId, required this.flightId, required this.date});
+  Reservation({
+    this.id,
+    required this.customerId,
+    required this.flightId,
+    required this.date,
+    required this.name,
+  });
 
   Map<String, dynamic> toMap() {
     return {
@@ -12,6 +19,7 @@ class Reservation {
       'customerId': customerId,
       'flightId': flightId,
       'date': date.toIso8601String(),
+      'name': name,
     };
   }
 
@@ -21,6 +29,7 @@ class Reservation {
       customerId: map['customerId'],
       flightId: map['flightId'],
       date: DateTime.parse(map['date']),
+      name: map['name'],
     );
   }
 }

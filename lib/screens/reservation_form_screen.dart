@@ -22,6 +22,7 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
   late int customerId;
   late int flightId;
   late DateTime date;
+  late String name; // New field for reservation name
   List<Customer> customers = [];
   List<Flight> flights = [];
 
@@ -32,10 +33,12 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
       customerId = widget.reservation!.customerId;
       flightId = widget.reservation!.flightId;
       date = widget.reservation!.date;
+      name = widget.reservation!.name;
     } else {
       customerId = 0;
       flightId = 0;
       date = DateTime.now();
+      name = '';
     }
     loadData();
   }
@@ -70,6 +73,12 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
           key: formKey,
           child: Column(
             children: [
+              TextFormField(
+                initialValue: name,
+                decoration: InputDecoration(labelText: localizations.translate('name') ?? 'Name'),
+                onSaved: (value) => name = value ?? '',
+                validator: (value) => value!.isEmpty ? localizations.translate('pleaseEnterName') ?? 'Please enter a name' : null,
+              ),
               buildDropdownField(
                 localizations,
                 'customers',
@@ -164,6 +173,7 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
             customerId: customerId,
             flightId: flightId,
             date: date,
+            name: name, // Include the new name field
           );
           if (widget.reservation != null) {
             await Provider.of<ReservationProvider>(context, listen: false).updateReservation(reservation);

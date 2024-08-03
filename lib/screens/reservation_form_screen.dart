@@ -72,7 +72,7 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
             children: [
               buildDropdownField(
                 localizations,
-                'customer',
+                'customers',
                 customers,
                     (Customer? value) {
                   customerId = value?.id ?? 0;
@@ -82,7 +82,7 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
               ),
               buildDropdownField(
                 localizations,
-                'flight',
+                'flights',
                 flights,
                     (Flight? value) {
                   flightId = value?.id ?? 0;

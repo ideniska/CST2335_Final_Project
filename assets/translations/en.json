@@ -54,5 +54,12 @@
   "appInstruction1": "Click on Airplane App to add new airplanes.",
   "appInstruction2": "Click on Customer App to add a new customer.",
   "appInstruction3": "Click on Flight List App to add a new Flight.",
-  "appInstruction4": "Click on Reservation App to create a new reservation based on customers and available flights."
+  "appInstruction4": "Click on Reservation App to create a new reservation based on customers and available flights.",
+  "confirmDelete": "Confirm Delete",
+  "areYouSure": "Are you sure?",
+  "cancel": "Cancel",
+  "airplaneFormInstruction1": "Click add",
+  "airplaneFormInstruction2": "Click add",
+  "airplaneFormInstruction3": "Click add",
+  "airplaneFormInstruction4": "Click add"
 }

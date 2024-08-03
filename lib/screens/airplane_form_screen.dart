@@ -4,7 +4,6 @@ import '../models/airplane.dart';
 import '../providers/airplane_provider.dart';
 import '../l10n/app_localizations.dart';
 import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
-import '../providers/locale_provider.dart';
 import '../l10n/localization_delegate.dart';
 
 class AirplaneFormScreen extends StatefulWidget {

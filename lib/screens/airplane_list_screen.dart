@@ -28,7 +28,11 @@ class AirplaneListScreenState extends State<AirplaneListScreen> {
       appBar: AppBar(
         title: Text(localizations.translate('airplanes')!),
       ),
-      body: buildBody(airplaneProvider, localizations),
+      body: OrientationBuilder(
+        builder: (context, orientation) {
+          return buildBody(airplaneProvider, localizations, orientation);
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
@@ -41,12 +45,12 @@ class AirplaneListScreenState extends State<AirplaneListScreen> {
     );
   }
 
-  Widget buildBody(AirplaneProvider airplaneProvider, AppLocalizations localizations) {
+  Widget buildBody(AirplaneProvider airplaneProvider, AppLocalizations localizations, Orientation orientation) {
     return airplaneProvider.airplanes.isEmpty
         ? Center(child: Text(localizations.translate('noItemsAvailable')!))
         : LayoutBuilder(
       builder: (context, constraints) {
-        if (constraints.maxWidth > 600) {
+        if (constraints.maxWidth > 600 || orientation == Orientation.landscape) {
           return buildTabletLayout(airplaneProvider, localizations);
         } else {
           return buildMobileLayout(airplaneProvider, localizations);
@@ -137,6 +141,38 @@ class AirplaneDetail extends StatelessWidget {
                 );
               },
               child: Text(localizations.translate('edit')!),
+            ),
+            SizedBox(height: 10.0),
+            ElevatedButton(
+              onPressed: () async {
+                final confirm = await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text(localizations.translate('confirmDelete') ?? 'Confirm Delete'),
+                      content: Text(localizations.translate('areYouSure') ?? 'Are you sure?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(false),
+                          child: Text(localizations.translate('cancel') ?? 'Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(true),
+                          child: Text(localizations.translate('delete') ?? 'Delete'),
+                          style: TextButton.styleFrom(backgroundColor: Colors.red),
+                        ),
+                      ],
+                    );
+                  },
+                );
+
+                if (confirm == true) {
+                  await Provider.of<AirplaneProvider>(context, listen: false).deleteAirplane(airplane.id!);
+                  Navigator.of(context).pop();
+                }
+              },
+              child: Text(localizations.translate('delete') ?? 'Delete'),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
             ),
           ],
         ),

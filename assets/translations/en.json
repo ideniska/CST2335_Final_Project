@@ -51,5 +51,20 @@
   "pleaseEnterDepartureTime": "Please enter a departure time",
   "pleaseEnterArrivalTime": "Please enter an arrival time",
   "errorLoadingFlights": "Error loading flights",
-  "flightRemoved": "Flight removed"
+  "flightRemoved": "Flight removed",
+  "reservations": "Reservations",
+  "noReservations": "No Reservations",
+  "editReservation": "Edit Reservation",
+  "addReservation": "Add Reservation",
+  "reservationListInstructions": "Press an item to edit or delete, Press + to add a new reservation.",
+  "reservationFormInstructions": "Set your reservation and press submit to add it to the list.",
+  "pleaseEnterName": "Please enter a name",
+  "pleaseSelectCustomer": "Please select a customer",
+  "pleaseSelectFlight": "Please select a flight",
+  "date": "Date",
+  "confirmDelete": "Confirm Delete",
+  "areYouSure": "Are you sure you want to delete this reservation?",
+  "cancel": "Cancel",
+  "gotoReservationApp": "Go to Reservation App",
+  "reservation": "Reservation"
 }

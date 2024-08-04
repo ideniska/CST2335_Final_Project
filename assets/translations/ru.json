@@ -51,5 +51,20 @@
   "pleaseEnterDepartureTime": "Пожалуйста, введите время отправления",
   "pleaseEnterArrivalTime": "Пожалуйста, введите время прибытия",
   "errorLoadingFlights": "Ошибка загрузки рейсов",
-  "flightRemoved": "Рейс удален"
+  "flightRemoved": "Рейс удален",
+  "reservations": "Бронирования",
+  "editReservation": "Редактировать резервирование",
+  "addReservation": "Добавить резервирование",
+  "name": "Имя",
+  "pleaseEnterName": "Пожалуйста, введите имя",
+  "pleaseSelectCustomer": "Пожалуйста, выберите клиента",
+  "pleaseSelectFlight": "Пожалуйста, выберите рейс",
+  "date": "Дата",
+  "reservationListInstructions": "Нажмите на элемент, чтобы отредактировать или удалить, нажмите +, чтобы добавить новое резервирование.",
+  "reservationFormInstructions": "Заполните резервирование и нажмите отправить, чтобы добавить его в список.",
+  "confirmDelete": "Подтвердите удаление",
+  "areYouSure": "Вы уверены, что хотите удалить это резервирование?",
+  "cancel": "Отмена",
+  "gotoReservationApp": "Перейти к приложению для бронирований",
+  "reservation": "Резервация"
 }

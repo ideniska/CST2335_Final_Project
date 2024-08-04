@@ -51,5 +51,20 @@
   "pleaseEnterDepartureTime": "Por favor ingrese una hora de salida",
   "pleaseEnterArrivalTime": "Por favor ingrese una hora de llegada",
   "errorLoadingFlights": "Error al cargar los vuelos",
-  "flightRemoved": "Vuelo eliminado"
+  "flightRemoved": "Vuelo eliminado",
+  "reservations": "Reservas",
+  "editReservation": "Editar Reserva",
+  "addReservation": "Agregar Reserva",
+  "name": "Nombre",
+  "pleaseEnterName": "Por favor ingrese un nombre",
+  "pleaseSelectCustomer": "Por favor seleccione un cliente",
+  "pleaseSelectFlight": "Por favor seleccione un vuelo",
+  "date": "Fecha",
+  "reservationListInstructions": "Presione un elemento para editar o eliminar, presione + para agregar una nueva reserva.",
+  "reservationFormInstructions": "Establezca su reserva y presione enviar para agregarla a la lista.",
+  "confirmDelete": "Confirmar Eliminación",
+  "areYouSure": "¿Está seguro de que desea eliminar esta reserva?",
+  "cancel": "Cancelar",
+  "gotoReservationApp": "Ir a la Aplicación de Reservas",
+  "reservation": "Reserva"
 }

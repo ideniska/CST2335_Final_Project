@@ -164,7 +164,7 @@ class ReservationDetail extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Reservation: ${reservation.name}',
+              '${localizations.translate('reservation') ?? 'Reservation'}: ${reservation.name}',
               style: Theme.of(context).textTheme.headline6,
             ),
             SizedBox(height: 8.0),

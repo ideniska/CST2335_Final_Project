@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
     final localeProvider = Provider.of<LocaleProvider>(context);
 
     return MaterialApp(
-      title: 'Main Menu',
+      title: 'CST2335 Flight booking app 1.0',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -60,7 +60,8 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)?.translate('mainMenu') ?? 'Main Menu'),
+        title: Text(AppLocalizations.of(context)?.translate('mainMenu') ?? 'CST2335 Flight booking app 1.0', style: TextStyle(fontSize: 12),),
+
         actions: [
           buildLanguageDropdown(context),
           buildInfoButton(context, AppLocalizations.of(context)!),

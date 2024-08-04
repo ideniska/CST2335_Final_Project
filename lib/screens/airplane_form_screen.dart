@@ -65,9 +65,6 @@ class _AirplaneFormScreenState extends State<AirplaneFormScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(isEditing ? localizations.translate('editAirplane')! : localizations.translate('addAirplane')!),
-        actions: [
-          buildInfoButton(context, localizations),
-        ],
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -88,42 +85,7 @@ class _AirplaneFormScreenState extends State<AirplaneFormScreen> {
     );
   }
 
-  /// Builds an info button that shows a dialog with instructions when pressed.
-  IconButton buildInfoButton(BuildContext context, AppLocalizations localizations) {
-    return IconButton(
-      icon: Icon(Icons.info),
-      onPressed: () {
-        // Show a dialog with instructions
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text(localizations.translate('instructions')!),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(localizations.translate('airplaneFormInstruction1')!),
-                SizedBox(height: 8),
-                Text(localizations.translate('airplaneFormInstruction2')!),
-                SizedBox(height: 8),
-                Text(localizations.translate('airplaneFormInstruction3')!),
-                SizedBox(height: 8),
-                Text(localizations.translate('airplaneFormInstruction4')!),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(localizations.translate('ok')!),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+
 
   /// Builds a text form field with validation and saving logic.
   TextFormField buildTextFormField(AppLocalizations localizations, String label, String initialValue, Function(String?) onSaved, {TextInputType keyboardType = TextInputType.text}) {

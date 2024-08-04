@@ -29,7 +29,11 @@ class AirplaneListScreenState extends State<AirplaneListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.translate('airplanes')!),
+        actions: [
+          buildInfoButton(context, localizations),
+        ],
       ),
+
       body: OrientationBuilder(
         builder: (context, orientation) {
           return buildBody(airplaneProvider, localizations, orientation);
@@ -44,6 +48,43 @@ class AirplaneListScreenState extends State<AirplaneListScreen> {
         },
         child: Icon(Icons.add),
       ),
+    );
+  }
+
+  /// Builds an info button that shows a dialog with instructions when pressed.
+  IconButton buildInfoButton(BuildContext context, AppLocalizations localizations) {
+    return IconButton(
+      icon: Icon(Icons.info),
+      onPressed: () {
+        // Show a dialog with instructions
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(localizations.translate('instructions')!),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(localizations.translate('airplaneFormInstruction1')!),
+                SizedBox(height: 8),
+                Text(localizations.translate('airplaneFormInstruction2')!),
+                SizedBox(height: 8),
+                Text(localizations.translate('airplaneFormInstruction3')!),
+                SizedBox(height: 8),
+                Text(localizations.translate('airplaneFormInstruction4')!),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(localizations.translate('ok')!),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 

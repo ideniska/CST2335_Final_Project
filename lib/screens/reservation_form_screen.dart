@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import '../models/reservation.dart';
 import '../models/customer.dart';
 import '../models/flight.dart';
@@ -23,12 +24,17 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
   late int flightId;
   late DateTime date;
   late String name;
+  late TextEditingController nameController;
   List<Customer> customers = [];
   List<Flight> flights = [];
+  late EncryptedSharedPreferences encryptedSharedPreferences;
 
   @override
   void initState() {
     super.initState();
+    encryptedSharedPreferences = EncryptedSharedPreferences();
+    nameController = TextEditingController(text: widget.reservation?.name ?? '');
+
     if (widget.reservation != null) {
       customerId = widget.reservation!.customerId;
       flightId = widget.reservation!.flightId;
@@ -41,6 +47,13 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
       name = '';
     }
     loadData();
+    _checkForAutofill();
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    super.dispose();
   }
 
   Future<void> loadData() async {
@@ -50,6 +63,26 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
     customers = await customerProvider.listCustomers() ?? [];
     flights = await flightProvider.listFlights() ?? [];
     setState(() {});
+  }
+
+  Future<void> _checkForAutofill() async {
+    final storedName = await encryptedSharedPreferences.getString('reservation_name');
+    if (storedName != null && storedName.isNotEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Would you like to autofill the name field?'),
+          action: SnackBarAction(
+            label: 'Autofill',
+            onPressed: () {
+              setState(() {
+                name = storedName;
+                nameController.text = storedName; // Update the controller
+              });
+            },
+          ),
+        ),
+      );
+    }
   }
 
   @override
@@ -85,7 +118,7 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
                 child: Column(
                   children: [
                     TextFormField(
-                      initialValue: name,
+                      controller: nameController,
                       decoration: InputDecoration(labelText: localizations.translate('name') ?? 'Name'),
                       onSaved: (value) => name = value ?? '',
                       validator: (value) => value!.isEmpty ? localizations.translate('pleaseEnterName') ?? 'Please enter a name' : null,
@@ -258,6 +291,8 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
           } else {
             await reservationProvider.addReservation(reservation);
           }
+          // Save the reservation name to encrypted shared preferences
+          await encryptedSharedPreferences.setString('reservation_name', name);
           Navigator.of(context).pop();
         }
       },

@@ -109,17 +109,43 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
                       SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () {
-                          final reservationProvider = Provider.of<ReservationProvider>(context, listen: false);
-                          if (widget.reservation?.id != null) {
-                            reservationProvider.deleteReservation(widget.reservation!.id!);
-                            Navigator.pop(context);
-                          }
+                          // Show the confirmation dialog
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text(AppLocalizations.of(context)?.translate('confirmDelete') ?? 'Confirm Delete'),
+                                content: Text(AppLocalizations.of(context)?.translate('areYouSure') ?? 'Are you sure you want to delete this reservation?'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop(); // Close the dialog
+                                    },
+                                    child: Text(AppLocalizations.of(context)?.translate('cancel') ?? 'Cancel'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      // Delete the reservation and pop the screen
+                                      final reservationProvider = Provider.of<ReservationProvider>(context, listen: false);
+                                      if (widget.reservation?.id != null) {
+                                        reservationProvider.deleteReservation(widget.reservation!.id!);
+                                        Navigator.of(context).pop(); // Close the dialog
+                                        Navigator.of(context).pop(); // Pop the screen
+                                      }
+                                    },
+                                    child: Text(AppLocalizations.of(context)?.translate('delete') ?? 'Delete'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                         },
-                        child: Text(localizations.translate('delete') ?? 'Delete'),
+                        child: Text(AppLocalizations.of(context)?.translate('delete') ?? 'Delete'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red, // Color for the delete button
                         ),
                       ),
+
                     ],
                   ],
                 ),

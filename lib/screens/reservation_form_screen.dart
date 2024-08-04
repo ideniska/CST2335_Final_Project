@@ -119,7 +119,7 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
-        child: SingleChildScrollView( // Wrap the Column with SingleChildScrollView
+        child: SingleChildScrollView(
           child: Column(
             children: [
               Form(
@@ -156,48 +156,7 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
                     ),
                     buildDatePicker(localizations),
                     SizedBox(height: 20),
-                    buildSubmitButton(context, localizations),
-                    if (widget.reservation != null) ...[
-                      SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () {
-                          // Show the confirmation dialog
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text(AppLocalizations.of(context)?.translate('confirmDelete') ?? 'Confirm Delete'),
-                                content: Text(AppLocalizations.of(context)?.translate('areYouSure') ?? 'Are you sure you want to delete this reservation?'),
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop(); // Close the dialog
-                                    },
-                                    child: Text(AppLocalizations.of(context)?.translate('cancel') ?? 'Cancel'),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      // Delete the reservation and pop the screen
-                                      final reservationProvider = Provider.of<ReservationProvider>(context, listen: false);
-                                      if (widget.reservation?.id != null) {
-                                        reservationProvider.deleteReservation(widget.reservation!.id!);
-                                        Navigator.of(context).pop(); // Close the dialog
-                                        Navigator.of(context).pop(); // Pop the screen
-                                      }
-                                    },
-                                    child: Text(AppLocalizations.of(context)?.translate('delete') ?? 'Delete'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                        child: Text(AppLocalizations.of(context)?.translate('delete') ?? 'Delete'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red, // Color for the delete button
-                        ),
-                      ),
-                    ],
+                    buildButtonRow(context, localizations),
                   ],
                 ),
               ),
@@ -205,6 +164,84 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  /// Builds a row of submit and delete buttons for the form.
+  ///
+  /// [context] - The build context to use for button actions.
+  /// [localizations] - Provides localized strings for the button text.
+  Widget buildButtonRow(BuildContext context, AppLocalizations localizations) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        ElevatedButton(
+          onPressed: () async {
+            if (formKey.currentState!.validate()) {
+              formKey.currentState!.save();
+              final reservation = Reservation(
+                id: widget.reservation?.id,
+                customerId: customerId,
+                flightId: flightId,
+                date: date,
+                name: name,
+              );
+              final reservationProvider = Provider.of<ReservationProvider>(context, listen: false);
+              if (widget.reservation == null) {
+                reservationProvider.addReservation(reservation);
+              } else {
+                reservationProvider.updateReservation(reservation);
+              }
+
+              // Save the name to encrypted shared preferences
+              await encryptedSharedPreferences.setString('reservation_name', name);
+
+              Navigator.pop(context);
+            }
+          },
+          child: Text(localizations.translate('submit') ?? 'Submit'),
+        ),
+        if (widget.reservation != null) ...[
+          ElevatedButton(
+            onPressed: () {
+              // Show the confirmation dialog
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text(AppLocalizations.of(context)?.translate('confirmDelete') ?? 'Confirm Delete'),
+                    content: Text(AppLocalizations.of(context)?.translate('areYouSure') ?? 'Are you sure you want to delete this reservation?'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(); // Close the dialog
+                        },
+                        child: Text(AppLocalizations.of(context)?.translate('cancel') ?? 'Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          // Delete the reservation and pop the screen
+                          final reservationProvider = Provider.of<ReservationProvider>(context, listen: false);
+                          if (widget.reservation?.id != null) {
+                            reservationProvider.deleteReservation(widget.reservation!.id!);
+                            Navigator.of(context).pop(); // Close the dialog
+                            Navigator.of(context).pop(); // Pop the screen
+                          }
+                        },
+                        child: Text(AppLocalizations.of(context)?.translate('delete') ?? 'Delete'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            child: Text(AppLocalizations.of(context)?.translate('delete') ?? 'Delete'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red, // Color for the delete button
+            ),
+          ),
+        ],
+      ],
     );
   }
 
@@ -297,39 +334,6 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
           },
         ),
       ],
-    );
-  }
-
-  /// Builds a submit button for the form.
-  ///
-  /// [context] - The build context to use for form submission.
-  /// [localizations] - Provides localized strings for the button text.
-  Widget buildSubmitButton(BuildContext context, AppLocalizations localizations) {
-    return ElevatedButton(
-      onPressed: () async {
-        if (formKey.currentState!.validate()) {
-          formKey.currentState!.save();
-          final reservation = Reservation(
-            id: widget.reservation?.id,
-            customerId: customerId,
-            flightId: flightId,
-            date: date,
-            name: name,
-          );
-          final reservationProvider = Provider.of<ReservationProvider>(context, listen: false);
-          if (widget.reservation == null) {
-            reservationProvider.addReservation(reservation);
-          } else {
-            reservationProvider.updateReservation(reservation);
-          }
-
-          // Save the name to encrypted shared preferences
-          await encryptedSharedPreferences.setString('reservation_name', name);
-
-          Navigator.pop(context);
-        }
-      },
-      child: Text(localizations.translate('submit') ?? 'Submit'),
     );
   }
 

@@ -8,6 +8,7 @@ import '../l10n/app_localizations.dart';
 import 'reservation_form_screen.dart';
 import '../providers/customer_provider.dart';
 import '../providers/flight_provider.dart';
+import 'package:intl/intl.dart';
 
 class ReservationListScreen extends StatefulWidget {
   @override
@@ -16,6 +17,7 @@ class ReservationListScreen extends StatefulWidget {
 
 class _ReservationListScreenState extends State<ReservationListScreen> {
   Reservation? selectedReservation;
+  final DateFormat dateFormatter = DateFormat('yyyy-MM-dd');
 
   @override
   void initState() {
@@ -104,7 +106,7 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
               final reservation = reservationProvider.reservations![index];
               return ListTile(
                 title: Text('${reservation.name}'), // Display the name of the reservation
-                subtitle: Text('${reservation.date.toLocal()}'),
+                subtitle: Text(dateFormatter.format(reservation.date.toLocal())), // Format the date
                 onTap: () {
                   setState(() {
                     selectedReservation = reservation;
@@ -129,7 +131,7 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
         final reservation = reservationProvider.reservations![index];
         return ListTile(
           title: Text('${reservation.name}'), // Display the name of the reservation
-          subtitle: Text('${reservation.date.toLocal()}'),
+          subtitle: Text(dateFormatter.format(reservation.date.toLocal())), // Format the date
           onTap: () {
             Navigator.push(
               context,
@@ -143,6 +145,7 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
     );
   }
 }
+
 
 class ReservationDetail extends StatelessWidget {
   final Reservation reservation;

@@ -66,5 +66,7 @@
   "areYouSure": "Are you sure you want to delete this reservation?",
   "cancel": "Cancel",
   "gotoReservationApp": "Go to Reservation App",
-  "reservation": "Reservation"
+  "reservation": "Reservation",
+  "autofillPrompt": "Would you like to autofill the name field?",
+  "autofill": "Autofill"
 }

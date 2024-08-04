@@ -70,11 +70,12 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
   Future<void> _checkForAutofill() async {
     final storedName = await encryptedSharedPreferences.getString('reservation_name');
     if (storedName != null && storedName.isNotEmpty) {
+      final localizations = AppLocalizations.of(context);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Would you like to autofill the name field?'),
+          content: Text(localizations?.translate('autofillPrompt') ?? 'Would you like to autofill the name field?'),
           action: SnackBarAction(
-            label: 'Autofill',
+            label: localizations?.translate('autofill') ?? 'Autofill',
             onPressed: () {
               setState(() {
                 name = storedName;

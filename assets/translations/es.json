@@ -66,5 +66,7 @@
   "areYouSure": "¿Está seguro de que desea eliminar esta reserva?",
   "cancel": "Cancelar",
   "gotoReservationApp": "Ir a la Aplicación de Reservas",
-  "reservation": "Reserva"
+  "reservation": "Reserva",
+  "autofillPrompt": "¿Te gustaría rellenar automáticamente el campo del nombre?",
+  "autofill": "Rellenar automáticamente"
 }

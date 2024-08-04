@@ -12,19 +12,19 @@ class CustomerFormScreen extends StatefulWidget {
   CustomerFormScreen({this.customer});
 
   @override
-  _CustomerFormScreenState createState() => _CustomerFormScreenState();
+  CustomerFormScreenState createState() => CustomerFormScreenState();
 }
 
-class _CustomerFormScreenState extends State<CustomerFormScreen> {
-  final _formKey = GlobalKey<FormState>();
+class CustomerFormScreenState extends State<CustomerFormScreen> {
+  final formKey = GlobalKey<FormState>();
   late String firstName;
   late String lastName;
   late String address;
   late DateTime birthday;
-  late TextEditingController _firstNameController;
-  late TextEditingController _lastNameController;
-  late TextEditingController _addressController;
-  late TextEditingController _birthdayController;
+  late TextEditingController firstNameController;
+  late TextEditingController lastNameController;
+  late TextEditingController addressController;
+  late TextEditingController birthdayController;
 
   @override
   void initState() {
@@ -39,24 +39,24 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
       lastName = '';
       address = '';
       birthday = DateTime.now();
-      _promptUsePreviousData();
+      promptUsePreviousData();
     }
-    _firstNameController = TextEditingController(text: firstName);
-    _lastNameController = TextEditingController(text: lastName);
-    _addressController = TextEditingController(text: address);
-    _birthdayController = TextEditingController(text: DateFormat.yMd().format(birthday));
+    firstNameController = TextEditingController(text: firstName);
+    lastNameController = TextEditingController(text: lastName);
+    addressController = TextEditingController(text: address);
+    birthdayController = TextEditingController(text: DateFormat.yMd().format(birthday));
   }
 
   @override
   void dispose() {
-    _firstNameController.dispose();
-    _lastNameController.dispose();
-    _addressController.dispose();
-    _birthdayController.dispose();
+    firstNameController.dispose();
+    lastNameController.dispose();
+    addressController.dispose();
+    birthdayController.dispose();
     super.dispose();
   }
 
-  Future<void> _promptUsePreviousData() async {
+  Future<void> promptUsePreviousData() async {
     final prefs = await SharedPreferences.getInstance();
     if (prefs.containsKey('firstName')) {
       bool useData = await showDialog(
@@ -83,16 +83,16 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
           lastName = prefs.getString('lastName') ?? '';
           address = prefs.getString('address') ?? '';
           birthday = DateTime.parse(prefs.getString('birthday') ?? DateTime.now().toString());
-          _firstNameController.text = firstName;
-          _lastNameController.text = lastName;
-          _addressController.text = address;
-          _birthdayController.text = DateFormat.yMd().format(birthday);
+          firstNameController.text = firstName;
+          lastNameController.text = lastName;
+          addressController.text = address;
+          birthdayController.text = DateFormat.yMd().format(birthday);
         });
       }
     }
   }
 
-  Future<void> _saveCustomerData(Customer customer) async {
+  Future<void> saveCustomerData(Customer customer) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('firstName', customer.firstName);
     await prefs.setString('lastName', customer.lastName);
@@ -109,88 +109,90 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
       appBar: AppBar(
         title: Text(isEditing ? localizations.translate('editCustomer') ?? 'Edit Customer' : localizations.translate('addCustomer') ?? 'Add Customer'),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _firstNameController,
-                decoration: InputDecoration(labelText: localizations.translate('firstName') ?? 'First Name'),
-                validator: (value) => value!.isEmpty ? localizations.translate('pleaseEnterFirstName') ?? 'Please enter a first name' : null,
-                onSaved: (value) => firstName = value!,
-              ),
-              TextFormField(
-                controller: _lastNameController,
-                decoration: InputDecoration(labelText: localizations.translate('lastName') ?? 'Last Name'),
-                validator: (value) => value!.isEmpty ? localizations.translate('pleaseEnterLastName') ?? 'Please enter a last name' : null,
-                onSaved: (value) => lastName = value!,
-              ),
-              TextFormField(
-                controller: _addressController,
-                decoration: InputDecoration(labelText: localizations.translate('address') ?? 'Address'),
-                validator: (value) => value!.isEmpty ? localizations.translate('pleaseEnterAddress') ?? 'Please enter an address' : null,
-                onSaved: (value) => address = value!,
-              ),
-              GestureDetector(
-                onTap: () async {
-                  DateTime? pickedDate = await showDatePicker(
-                    context: context,
-                    initialDate: birthday,
-                    firstDate: DateTime(1900),
-                    lastDate: DateTime(2101),
-                  );
-                  if (pickedDate != null && pickedDate != birthday)
-                    setState(() {
-                      birthday = pickedDate;
-                      _birthdayController.text = DateFormat.yMd().format(birthday);
-                    });
-                },
-                child: AbsorbPointer(
-                  child: TextFormField(
-                    controller: _birthdayController,
-                    decoration: InputDecoration(
-                      labelText: localizations.translate('birthday') ?? 'Birthday',
-                      hintText: DateFormat.yMd().format(birthday),
+      body: SingleChildScrollView(  // <-- Added SingleChildScrollView
+        child: Padding(  // <-- Added Padding
+          padding: EdgeInsets.all(16.0),
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: firstNameController,
+                  decoration: InputDecoration(labelText: localizations.translate('firstName') ?? 'First Name'),
+                  validator: (value) => value!.isEmpty ? localizations.translate('pleaseEnterFirstName') ?? 'Please enter a first name' : null,
+                  onSaved: (value) => firstName = value!,
+                ),
+                TextFormField(
+                  controller: lastNameController,
+                  decoration: InputDecoration(labelText: localizations.translate('lastName') ?? 'Last Name'),
+                  validator: (value) => value!.isEmpty ? localizations.translate('pleaseEnterLastName') ?? 'Please enter a last name' : null,
+                  onSaved: (value) => lastName = value!,
+                ),
+                TextFormField(
+                  controller: addressController,
+                  decoration: InputDecoration(labelText: localizations.translate('address') ?? 'Address'),
+                  validator: (value) => value!.isEmpty ? localizations.translate('pleaseEnterAddress') ?? 'Please enter an address' : null,
+                  onSaved: (value) => address = value!,
+                ),
+                GestureDetector(
+                  onTap: () async {
+                    DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: birthday,
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime(2101),
+                    );
+                    if (pickedDate != null && pickedDate != birthday)
+                      setState(() {
+                        birthday = pickedDate;
+                        birthdayController.text = DateFormat.yMd().format(birthday);
+                      });
+                  },
+                  child: AbsorbPointer(
+                    child: TextFormField(
+                      controller: birthdayController,
+                      decoration: InputDecoration(
+                        labelText: localizations.translate('birthday') ?? 'Birthday',
+                        hintText: DateFormat.yMd().format(birthday),
+                      ),
+                      validator: (value) => value!.isEmpty ? localizations.translate('pleaseEnterBirthday') ?? 'Please enter a birthday' : null,
+                      onSaved: (value) => birthday = DateFormat.yMd().parse(birthdayController.text),
                     ),
-                    validator: (value) => value!.isEmpty ? localizations.translate('pleaseEnterBirthday') ?? 'Please enter a birthday' : null,
-                    onSaved: (value) => birthday = DateFormat.yMd().parse(_birthdayController.text),
                   ),
                 ),
-              ),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  if (isEditing) ...[
-                    ElevatedButton(
-                      onPressed: _updateCustomer,
-                      child: Text(localizations.translate('update') ?? 'Update'),
-                    ),
-                    ElevatedButton(
-                      onPressed: _deleteCustomer,
-                      child: Text(localizations.translate('delete') ?? 'Delete'),
-                      style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                    ),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    if (isEditing) ...[
+                      ElevatedButton(
+                        onPressed: updateCustomer,
+                        child: Text(localizations.translate('update') ?? 'Update'),
+                      ),
+                      ElevatedButton(
+                        onPressed: deleteCustomer,
+                        child: Text(localizations.translate('delete') ?? 'Delete'),
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                      ),
+                    ],
+                    if (!isEditing)
+                      ElevatedButton(
+                        onPressed: submitCustomer,
+                        child: Text(localizations.translate('submit') ?? 'Submit'),
+                      ),
                   ],
-                  if (!isEditing)
-                    ElevatedButton(
-                      onPressed: _submitCustomer,
-                      child: Text(localizations.translate('submit') ?? 'Submit'),
-                    ),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  void _submitCustomer() async {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
+  void submitCustomer() async {
+    if (formKey.currentState!.validate()) {
+      formKey.currentState!.save();
       final newCustomer = Customer(
         firstName: firstName,
         lastName: lastName,
@@ -198,14 +200,14 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
         birthday: birthday,
       );
       await Provider.of<CustomerProvider>(context, listen: false).addCustomer(newCustomer);
-      await _saveCustomerData(newCustomer);
+      await saveCustomerData(newCustomer);
       Navigator.of(context).pop();
     }
   }
 
-  void _updateCustomer() async {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
+  void updateCustomer() async {
+    if (formKey.currentState!.validate()) {
+      formKey.currentState!.save();
       final updatedCustomer = Customer(
         id: widget.customer!.id,
         firstName: firstName,
@@ -214,12 +216,12 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
         birthday: birthday,
       );
       await Provider.of<CustomerProvider>(context, listen: false).updateCustomer(updatedCustomer);
-      await _saveCustomerData(updatedCustomer);
+      await saveCustomerData(updatedCustomer);
       Navigator.of(context).pop();
     }
   }
 
-  void _deleteCustomer() async {
+  void deleteCustomer() async {
     await Provider.of<CustomerProvider>(context, listen: false).deleteCustomer(widget.customer!.id!);
     Navigator.of(context).pop();
   }

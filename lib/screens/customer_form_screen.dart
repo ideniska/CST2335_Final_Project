@@ -6,9 +6,12 @@ import '../providers/customer_provider.dart';
 import 'package:intl/intl.dart'; // For formatting the date
 import '../l10n/app_localizations.dart';
 
+/// A screen for adding or editing a customer.
 class CustomerFormScreen extends StatefulWidget {
+  /// The customer to be edited. If null, a new customer will be added.
   final Customer? customer;
 
+  /// Creates a [CustomerFormScreen] widget.
   CustomerFormScreen({this.customer});
 
   @override
@@ -56,6 +59,10 @@ class CustomerFormScreenState extends State<CustomerFormScreen> {
     super.dispose();
   }
 
+  /// Prompts the user to use previous customer data if available.
+  ///
+  /// If previous customer data is available in [SharedPreferences], the user is prompted with a dialog
+  /// this allows to reuse the data
   Future<void> promptUsePreviousData() async {
     final prefs = await SharedPreferences.getInstance();
     if (prefs.containsKey('firstName')) {
@@ -92,6 +99,8 @@ class CustomerFormScreenState extends State<CustomerFormScreen> {
     }
   }
 
+
+  /// Saves the given [Customer] data to [SharedPreferences].
   Future<void> saveCustomerData(Customer customer) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('firstName', customer.firstName);
@@ -190,6 +199,9 @@ class CustomerFormScreenState extends State<CustomerFormScreen> {
     );
   }
 
+  /// Submits the customer form and adds a new customer to the provider.
+  ///
+  /// This method validates the form, saves the form data, creates a new [Customer] object
   void submitCustomer() async {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
@@ -205,6 +217,9 @@ class CustomerFormScreenState extends State<CustomerFormScreen> {
     }
   }
 
+  /// Updates an existing customer in the provider.
+  ///
+  /// This method validates the form, saves the form data, updates the [Customer] object.
   void updateCustomer() async {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
@@ -220,7 +235,7 @@ class CustomerFormScreenState extends State<CustomerFormScreen> {
       Navigator.of(context).pop();
     }
   }
-
+  /// Deletes the customer from the provider.
   void deleteCustomer() async {
     await Provider.of<CustomerProvider>(context, listen: false).deleteCustomer(widget.customer!.id!);
     Navigator.of(context).pop();

@@ -5,6 +5,7 @@ import 'customer_form_screen.dart';
 import '../models/customer.dart';
 import '../l10n/app_localizations.dart';
 
+/// A screen that displays a list of customers.
 class CustomerListScreen extends StatefulWidget {
   @override
   CustomerListScreenState createState() => CustomerListScreenState();
@@ -44,6 +45,11 @@ class CustomerListScreenState extends State<CustomerListScreen> {
     );
   }
 
+  /// Builds the body of the screen based on the orientation.
+  ///
+  /// [context] is the build context.
+  /// [orientation] is the current orientation of the device.
+  /// [localizations] provides localized strings for the app.
   Widget buildBody(BuildContext context, Orientation orientation, AppLocalizations localizations) {
     return Consumer<CustomerProvider>(
       builder: (context, customerProvider, child) {
@@ -64,6 +70,11 @@ class CustomerListScreenState extends State<CustomerListScreen> {
     );
   }
 
+
+  /// Builds the layout for tablets and landscape orientation.
+  ///
+  /// [customerProvider] provides the list of customers.
+  /// [localizations] provides localized strings for the app.
   Widget buildTabletLayout(CustomerProvider customerProvider, AppLocalizations localizations) {
     return Row(
       children: [
@@ -92,6 +103,11 @@ class CustomerListScreenState extends State<CustomerListScreen> {
     );
   }
 
+
+  /// Builds the layout for mobile devices and portrait orientation.
+  ///
+  /// [customerProvider] provides the list of customers.
+  /// [localizations] provides localized strings for the app.
   Widget buildMobileLayout(CustomerProvider customerProvider, AppLocalizations localizations) {
     return ListView.builder(
       itemCount: customerProvider.customers.length,
@@ -114,9 +130,13 @@ class CustomerListScreenState extends State<CustomerListScreen> {
   }
 }
 
+
+/// A widget that displays the details of a selected customer.
 class CustomerDetail extends StatelessWidget {
+  /// The customer whose details are to be displayed.
   final Customer customer;
 
+  /// Creates a [CustomerDetail] widget.
   const CustomerDetail({required this.customer});
 
   @override

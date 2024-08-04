@@ -44,4 +44,14 @@ class FlightProvider with ChangeNotifier {
     _flights.removeWhere((item) => item.id == id);
     notifyListeners();
   }
+
+  Future<Flight?> getFlightById(int id) async {
+    final flights = await DatabaseHelper().getFlights();
+    try {
+      return flights.firstWhere((flight) => flight.id == id);
+    } catch (e) {
+      return null; // Return null if not found
+    }
+  }
+
 }

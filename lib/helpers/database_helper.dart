@@ -31,7 +31,7 @@ class DatabaseHelper {
       'CREATE TABLE customers(id INTEGER PRIMARY KEY, firstName TEXT, lastName TEXT, address TEXT, birthday TEXT)',
     );
     await db.execute(
-      'CREATE TABLE reservations(id INTEGER PRIMARY KEY AUTOINCREMENT, customerId INTEGER, flightId INTEGER, date TEXT, FOREIGN KEY (customerId) REFERENCES customers(id), FOREIGN KEY (flightId) REFERENCES airplanes(id))',
+      'CREATE TABLE reservations(id INTEGER PRIMARY KEY AUTOINCREMENT, customerId INTEGER, flightId INTEGER, date TEXT, name TEXT, FOREIGN KEY (customerId) REFERENCES customers(id), FOREIGN KEY (flightId) REFERENCES airplanes(id))',
     );
     await db.execute(
       'CREATE TABLE flights(id INTEGER PRIMARY KEY AUTOINCREMENT, departureCity TEXT, destinationCity TEXT, departureTime TEXT, arrivalTime TEXT)',
@@ -44,7 +44,13 @@ class DatabaseHelper {
         'CREATE TABLE flights(id INTEGER PRIMARY KEY AUTOINCREMENT, departureCity TEXT, destinationCity TEXT, departureTime TEXT, arrivalTime TEXT)',
       );
     }
+    if (oldVersion < 3) {
+      await db.execute(
+        'ALTER TABLE reservations ADD COLUMN name TEXT',
+      );
+    }
   }
+
 
   // Airplane methods
   Future<int> insertAirplane(Airplane airplane) async {

@@ -125,7 +125,7 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
                       onSaved: (value) => name = value ?? '',
                       validator: (value) => value!.isEmpty ? localizations.translate('pleaseEnterName') ?? 'Please enter a name' : null,
                     ),
-                    buildDropdownField(
+                    buildDropdownField<Customer>(
                       localizations,
                       'customers',
                       customers,
@@ -133,9 +133,10 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
                         customerId = value?.id ?? 0;
                       },
                           (Customer? value) => value != null ? value.fullName : '',
+                      initialValue: firstWhereOrNull(customers, (customer) => customer.id == customerId),
                       validator: (value) => value == null ? localizations.translate('pleaseSelectCustomer') ?? 'Please select a customer' : null,
                     ),
-                    buildDropdownField(
+                    buildDropdownField<Flight>(
                       localizations,
                       'flights',
                       flights,
@@ -143,6 +144,7 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
                         flightId = value?.id ?? 0;
                       },
                           (Flight? value) => value != null ? '${value.departureCity} to ${value.destinationCity}' : '',
+                      initialValue: firstWhereOrNull(flights, (flight) => flight.id == flightId),
                       validator: (value) => value == null ? localizations.translate('pleaseSelectFlight') ?? 'Please select a flight' : null,
                     ),
                     buildDatePicker(localizations),
@@ -226,8 +228,10 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
       Function(T?) onChanged,
       String Function(T?) displayValue, {
         FormFieldValidator<T?>? validator,
+        T? initialValue,
       }) {
     return DropdownButtonFormField<T>(
+      value: initialValue,
       items: items.map((item) {
         return DropdownMenuItem<T>(
           value: item,
@@ -286,19 +290,28 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
             name: name,
           );
           final reservationProvider = Provider.of<ReservationProvider>(context, listen: false);
-          if (widget.reservation != null) {
-            if (reservation.id != null) {
-              await reservationProvider.updateReservation(reservation);
-            }
+          if (widget.reservation == null) {
+            reservationProvider.addReservation(reservation);
           } else {
-            await reservationProvider.addReservation(reservation);
+            reservationProvider.updateReservation(reservation);
           }
-          // Save the reservation name to encrypted shared preferences
+
+          // Save the name to encrypted shared preferences
           await encryptedSharedPreferences.setString('reservation_name', name);
-          Navigator.of(context).pop();
+
+          Navigator.pop(context);
         }
       },
-      child: Text(localizations.translate(widget.reservation != null ? 'update' : 'submit') ?? 'Submit'),
+      child: Text(localizations.translate('submit') ?? 'Submit'),
     );
+  }
+
+  T? firstWhereOrNull<T>(List<T> items, bool Function(T) test) {
+    for (var item in items) {
+      if (test(item)) {
+        return item;
+      }
+    }
+    return null;
   }
 }

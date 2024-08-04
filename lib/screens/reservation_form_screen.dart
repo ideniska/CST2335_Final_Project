@@ -196,6 +196,17 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
               // Save the name to encrypted shared preferences
               await encryptedSharedPreferences.setString('reservation_name', name);
 
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(localizations.translate('submissionSuccess') ?? 'Reservation submitted successfully'),
+                  action: SnackBarAction(
+                    label: localizations.translate('dismiss') ?? 'Dismiss',
+                    onPressed: () {
+                    },
+                  ),
+                ),
+              );
+
               Navigator.pop(context);
             }
           },

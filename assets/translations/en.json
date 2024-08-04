@@ -76,5 +76,7 @@
   "airplaneFormInstruction2": "Click add",
   "airplaneFormInstruction3": "Click add",
   "airplaneFormInstruction4": "Click add",
-  "airplaneDetails": "Airplane details"
+  "airplaneDetails": "Airplane details",
+  "submissionSuccess": "Reservation submitted successfully",
+  "dismiss": "Dismiss"
 }

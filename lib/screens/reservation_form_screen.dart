@@ -47,7 +47,9 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
       name = '';
     }
     loadData();
-    _checkForAutofill();
+    if (widget.reservation == null) {
+      _checkForAutofill(); // Check for autofill only if adding a new reservation
+    }
   }
 
   @override

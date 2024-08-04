@@ -97,7 +97,7 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: Text(localizations.translate('ok') ?? 'OK'),
             ),
@@ -120,8 +120,8 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
             itemBuilder: (context, index) {
               final reservation = reservationProvider.reservations![index];
               return ListTile(
-                title: Text('${reservation.name}'), // Display the name of the reservation
-                subtitle: Text(dateFormatter.format(reservation.date.toLocal())), // Format the date
+                title: Text('${reservation.name}'),
+                subtitle: Text(dateFormatter.format(reservation.date.toLocal())),
                 onTap: () {
                   setState(() {
                     selectedReservation = reservation;
@@ -149,8 +149,8 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
       itemBuilder: (context, index) {
         final reservation = reservationProvider.reservations![index];
         return ListTile(
-          title: Text('${reservation.name}'), // Display the name of the reservation
-          subtitle: Text(dateFormatter.format(reservation.date.toLocal())), // Format the date
+          title: Text('${reservation.name}'),
+          subtitle: Text(dateFormatter.format(reservation.date.toLocal())),
           onTap: () {
             Navigator.push(
               context,
@@ -185,7 +185,7 @@ class ReservationDetail extends StatelessWidget {
       margin: EdgeInsets.all(16.0),
       child: Padding(
         padding: EdgeInsets.all(16.0),
-        child: SingleChildScrollView( // Wrap the Column in SingleChildScrollView
+        child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -281,7 +281,7 @@ class ReservationDetail extends StatelessWidget {
                 },
                 child: Text(localizations.translate('delete') ?? 'Delete'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red, // Color for the delete button
+                  backgroundColor: Colors.red,
                 ),
               ),
             ],

@@ -194,6 +194,22 @@ class ReservationDetail extends StatelessWidget {
                 style: Theme.of(context).textTheme.headline6,
               ),
               SizedBox(height: 8.0),
+              FutureBuilder<Customer?>(
+                future: customerProvider.getCustomerById(reservation.customerId),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Text('Loading customer...');
+                  } else if (snapshot.hasError) {
+                    return Text('Error loading customer');
+                  } else if (!snapshot.hasData) {
+                    return Text('Customer not found');
+                  } else {
+                    final customer = snapshot.data!;
+                    return Text('${localizations.translate('customerName') ?? 'Customer Name'}: ${customer.fullName ?? 'Unknown'}');
+                  }
+                },
+              ),
+              SizedBox(height: 8.0),
               FutureBuilder<Flight?>(
                 future: flightProvider.getFlightById(reservation.flightId),
                 builder: (context, snapshot) {
@@ -273,5 +289,6 @@ class ReservationDetail extends StatelessWidget {
         ),
       ),
     );
+
   }
 }

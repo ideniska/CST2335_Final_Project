@@ -66,7 +66,6 @@ class _AirplaneFormScreenState extends State<AirplaneFormScreen> {
       appBar: AppBar(
         title: Text(isEditing ? localizations.translate('editAirplane')! : localizations.translate('addAirplane')!),
         actions: [
-          buildLanguageDropdown(context),
           buildInfoButton(context, localizations),
         ],
       ),
@@ -86,26 +85,6 @@ class _AirplaneFormScreenState extends State<AirplaneFormScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  /// Builds a dropdown button for selecting the app's language.
-  DropdownButton<Locale> buildLanguageDropdown(BuildContext context) {
-    final localeProvider = Provider.of<LocaleProvider>(context);
-    return DropdownButton<Locale>(
-      value: localeProvider.locale,
-      icon: Icon(Icons.language, color: Colors.white),
-      items: L10n.all.map((locale) {
-        final flag = L10n.getFlag(locale.languageCode);
-        return DropdownMenuItem(
-          child: Center(child: Text(flag, style: TextStyle(fontSize: 24))),
-          value: locale,
-          onTap: () {
-            localeProvider.setLocale(locale);
-          },
-        );
-      }).toList(),
-      onChanged: (_) {},
     );
   }
 

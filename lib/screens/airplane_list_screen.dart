@@ -5,11 +5,13 @@ import 'airplane_form_screen.dart';
 import '../models/airplane.dart';
 import '../l10n/app_localizations.dart';
 
+/// A screen that displays a list of airplanes.
 class AirplaneListScreen extends StatefulWidget {
   @override
   AirplaneListScreenState createState() => AirplaneListScreenState();
 }
 
+/// The state for the [AirplaneListScreen].
 class AirplaneListScreenState extends State<AirplaneListScreen> {
   Airplane? selectedAirplane;
 
@@ -45,6 +47,7 @@ class AirplaneListScreenState extends State<AirplaneListScreen> {
     );
   }
 
+  /// Builds the body of the screen based on the orientation.
   Widget buildBody(AirplaneProvider airplaneProvider, AppLocalizations localizations, Orientation orientation) {
     return airplaneProvider.airplanes.isEmpty
         ? Center(child: Text(localizations.translate('noItemsAvailable')!))
@@ -59,6 +62,7 @@ class AirplaneListScreenState extends State<AirplaneListScreen> {
     );
   }
 
+  /// Builds the layout for tablet devices.
   Widget buildTabletLayout(AirplaneProvider airplaneProvider, AppLocalizations localizations) {
     return Row(
       children: [
@@ -87,6 +91,7 @@ class AirplaneListScreenState extends State<AirplaneListScreen> {
     );
   }
 
+  /// Builds the layout for mobile devices.
   Widget buildMobileLayout(AirplaneProvider airplaneProvider, AppLocalizations localizations) {
     return ListView.builder(
       itemCount: airplaneProvider.airplanes.length,
@@ -109,9 +114,11 @@ class AirplaneListScreenState extends State<AirplaneListScreen> {
   }
 }
 
+/// A widget that displays the details of an airplane.
 class AirplaneDetail extends StatelessWidget {
   final Airplane airplane;
 
+  /// Creates an [AirplaneDetail] widget.
   const AirplaneDetail({required this.airplane});
 
   @override

@@ -76,5 +76,6 @@
   "appInstruction2": "Haga clic en la aplicación de cliente para agregar un nuevo cliente.",
   "appInstruction3": "Haga clic en la aplicación de lista de vuelos para agregar un nuevo vuelo.",
   "appInstruction4": "Haga clic en la aplicación de reservación para crear una nueva reservación basada en los clientes y vuelos disponibles.",
-  "airplaneAdded": "Avión añadido con éxito"
+  "airplaneAdded": "Avión añadido con éxito",
+  "flightAdded": "Vuelo añadido con éxito"
 }

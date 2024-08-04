@@ -28,10 +28,6 @@ void main() {
     ),
   );
 }
-Future<void> deleteDatabaseFile() async {
-  String path = join(await getDatabasesPath(), 'airplanes.db');
-  await deleteDatabase(path);
-}
 
 class MyApp extends StatelessWidget {
 
@@ -58,6 +54,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+/// The main screen of the application.
 class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -115,6 +112,7 @@ class MainScreen extends StatelessWidget {
     );
   }
 
+  /// Builds a dropdown button for selecting the app's language.
   DropdownButton<Locale> buildLanguageDropdown(BuildContext context) {
     final localeProvider = Provider.of<LocaleProvider>(context);
     return DropdownButton<Locale>(
@@ -134,6 +132,7 @@ class MainScreen extends StatelessWidget {
     );
   }
 
+  /// Builds an info button that shows a dialog with instructions when pressed.
   IconButton buildInfoButton(BuildContext context, AppLocalizations localizations) {
     return IconButton(
       icon: Icon(Icons.info),

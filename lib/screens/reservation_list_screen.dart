@@ -36,6 +36,14 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.translate('reservations') ?? 'Reservations'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.help),
+            onPressed: () {
+              _showInstructionsDialog(context, localizations);
+            },
+          ),
+        ],
       ),
       body: reservationProvider.reservations == null
           ? Center(child: CircularProgressIndicator())
@@ -59,6 +67,26 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
         },
         child: Icon(Icons.add),
       ),
+    );
+  }
+
+  void _showInstructionsDialog(BuildContext context, AppLocalizations localizations) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(localizations.translate('instructions') ?? 'Instructions'),
+          content: Text(localizations.translate('reservationListInstructions') ?? 'Press an item to edit or delete, Press + to add a new reservation.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text(localizations.translate('ok') ?? 'OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 

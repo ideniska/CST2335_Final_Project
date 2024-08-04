@@ -66,6 +66,14 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
         title: Text(widget.reservation != null
             ? localizations.translate('editReservation') ?? 'Edit Reservation'
             : localizations.translate('addReservation') ?? 'Add Reservation'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.help),
+            onPressed: () {
+              _showInstructionsDialog(context, localizations);
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -145,7 +153,6 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
                           backgroundColor: Colors.red, // Color for the delete button
                         ),
                       ),
-
                     ],
                   ],
                 ),
@@ -154,6 +161,26 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  void _showInstructionsDialog(BuildContext context, AppLocalizations localizations) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(localizations.translate('instructions') ?? 'Instructions'),
+          content: Text(localizations.translate('reservationFormInstructions') ?? 'Set your reservation and press submit to add it to the list.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text(localizations.translate('ok') ?? 'OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 

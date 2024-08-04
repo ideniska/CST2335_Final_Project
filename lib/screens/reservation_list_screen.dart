@@ -99,7 +99,7 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
             itemBuilder: (context, index) {
               final reservation = reservationProvider.reservations![index];
               return ListTile(
-                title: Text('${reservation.customerId} - ${reservation.flightId}'),
+                title: Text('${reservation.name}'), // Display the name of the reservation
                 subtitle: Text('${reservation.date.toLocal()}'),
                 onTap: () {
                   setState(() {
@@ -124,7 +124,7 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
       itemBuilder: (context, index) {
         final reservation = reservationProvider.reservations![index];
         return ListTile(
-          title: Text('${reservation.customerId} - ${reservation.flightId}'),
+          title: Text('${reservation.name}'), // Display the name of the reservation
           subtitle: Text('${reservation.date.toLocal()}'),
           onTap: () {
             Navigator.push(

@@ -45,7 +45,7 @@ class CustomerProvider with ChangeNotifier {
     try {
       return customers.firstWhere((customer) => customer.id == id);
     } catch (e) {
-      return null; // Return null if not found
+      return null;
     }
   }
 }

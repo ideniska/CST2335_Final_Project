@@ -112,10 +112,10 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Expanded(
-              child: Form(
+        child: SingleChildScrollView( // Wrap the Column with SingleChildScrollView
+          child: Column(
+            children: [
+              Form(
                 key: formKey,
                 child: Column(
                   children: [
@@ -194,8 +194,8 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

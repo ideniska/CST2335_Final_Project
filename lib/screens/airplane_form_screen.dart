@@ -6,9 +6,12 @@ import '../l10n/app_localizations.dart';
 import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import '../l10n/localization_delegate.dart';
 
+/// A screen for adding or editing an airplane.
 class AirplaneFormScreen extends StatefulWidget {
+  /// The airplane to edit. If null, the form will be for adding a new airplane.
   final Airplane? airplane;
 
+  /// Creates an [AirplaneFormScreen].
   AirplaneFormScreen({this.airplane});
 
   @override
@@ -36,6 +39,8 @@ class _AirplaneFormScreenState extends State<AirplaneFormScreen> {
       _loadPreviousFields();
     }
   }
+
+  /// Loads previously saved form fields from encrypted shared preferences.
   Future<void> _loadPreviousFields() async {
     type = await encryptedPrefs.getString('type') ?? '';
     passengers = int.tryParse(await encryptedPrefs.getString('passengers') ?? '0') ?? 0;
@@ -44,6 +49,7 @@ class _AirplaneFormScreenState extends State<AirplaneFormScreen> {
     setState(() {});
   }
 
+  /// Saves the current form fields to encrypted shared preferences.
   Future<void> _saveFields() async {
     await encryptedPrefs.setString('type', type);
     await encryptedPrefs.setString('passengers', passengers.toString());
@@ -82,6 +88,8 @@ class _AirplaneFormScreenState extends State<AirplaneFormScreen> {
       ),
     );
   }
+
+  /// Builds a dropdown button for selecting the app's language.
   DropdownButton<Locale> buildLanguageDropdown(BuildContext context) {
     final localeProvider = Provider.of<LocaleProvider>(context);
     return DropdownButton<Locale>(
@@ -101,6 +109,7 @@ class _AirplaneFormScreenState extends State<AirplaneFormScreen> {
     );
   }
 
+  /// Builds an info button that shows a dialog with instructions when pressed.
   IconButton buildInfoButton(BuildContext context, AppLocalizations localizations) {
     return IconButton(
       icon: Icon(Icons.info),
@@ -137,6 +146,7 @@ class _AirplaneFormScreenState extends State<AirplaneFormScreen> {
     );
   }
 
+  /// Builds a text form field with validation and saving logic.
   TextFormField buildTextFormField(AppLocalizations localizations, String label, String initialValue, Function(String?) onSaved, {TextInputType keyboardType = TextInputType.text}) {
     return TextFormField(
       initialValue: initialValue,
@@ -158,6 +168,7 @@ class _AirplaneFormScreenState extends State<AirplaneFormScreen> {
     );
   }
 
+  /// Builds a row of buttons for submitting, updating, or deleting the form.
   Row buildButtonRow(BuildContext context, AppLocalizations localizations, bool isEditing) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -169,6 +180,7 @@ class _AirplaneFormScreenState extends State<AirplaneFormScreen> {
     );
   }
 
+  /// Builds a button for updating an existing airplane.
   ElevatedButton buildEditButton(BuildContext context, AppLocalizations localizations) {
     return ElevatedButton(
       onPressed: () async {
@@ -190,6 +202,7 @@ class _AirplaneFormScreenState extends State<AirplaneFormScreen> {
     );
   }
 
+  /// Builds a button for deleting an existing airplane.
   ElevatedButton buildDeleteButton(BuildContext context, AppLocalizations localizations) {
     return ElevatedButton(
       onPressed: () async {
@@ -224,6 +237,7 @@ class _AirplaneFormScreenState extends State<AirplaneFormScreen> {
     );
   }
 
+  /// Builds a button for submitting a new airplane.
   ElevatedButton buildSubmitButton(BuildContext context, AppLocalizations localizations) {
     return ElevatedButton(
       onPressed: () async {

@@ -10,18 +10,25 @@ import '../providers/customer_provider.dart';
 import '../providers/flight_provider.dart';
 import 'package:intl/intl.dart';
 
+/// Screen displaying a list of reservations.
+///
+/// Provides options to view details of a reservation and add a new reservation.
 class ReservationListScreen extends StatefulWidget {
   @override
   _ReservationListScreenState createState() => _ReservationListScreenState();
 }
 
 class _ReservationListScreenState extends State<ReservationListScreen> {
+  /// The currently selected reservation.
   Reservation? selectedReservation;
+
+  /// Formatter for displaying reservation dates.
   final DateFormat dateFormatter = DateFormat('yyyy-MM-dd');
 
   @override
   void initState() {
     super.initState();
+    // Fetch reservations after the widget is built
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final reservationProvider = Provider.of<ReservationProvider>(context, listen: false);
       reservationProvider.getReservations();
@@ -76,6 +83,10 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
     );
   }
 
+  /// Displays a dialog with instructions for using the reservation list.
+  ///
+  /// [context] - The build context to use for showing the dialog.
+  /// [localizations] - Provides localized strings for the dialog content.
   void _showInstructionsDialog(BuildContext context, AppLocalizations localizations) {
     showDialog(
       context: context,
@@ -96,6 +107,10 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
     );
   }
 
+  /// Builds the layout for tablet devices.
+  ///
+  /// [reservationProvider] - Provides access to the list of reservations.
+  /// [localizations] - Provides localized strings for the UI.
   Widget buildTabletLayout(ReservationProvider reservationProvider, AppLocalizations localizations) {
     return Row(
       children: [
@@ -124,6 +139,10 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
     );
   }
 
+  /// Builds the layout for mobile devices.
+  ///
+  /// [reservationProvider] - Provides access to the list of reservations.
+  /// [localizations] - Provides localized strings for the UI.
   Widget buildMobileLayout(ReservationProvider reservationProvider, AppLocalizations localizations) {
     return ListView.builder(
       itemCount: reservationProvider.reservations!.length,
@@ -146,8 +165,11 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
   }
 }
 
-
+/// Widget displaying details of a reservation.
+///
+/// Provides options to edit the reservation and shows related flight information.
 class ReservationDetail extends StatelessWidget {
+  /// The reservation whose details are to be displayed.
   final Reservation reservation;
 
   const ReservationDetail({required this.reservation});

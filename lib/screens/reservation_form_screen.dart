@@ -9,7 +9,11 @@ import '../providers/flight_provider.dart';
 import '../providers/reservation_provider.dart';
 import '../l10n/app_localizations.dart';
 
+/// Screen for adding or editing a reservation.
+///
+/// Displays a form with fields for reservation details and options to submit or delete a reservation.
 class ReservationFormScreen extends StatefulWidget {
+  /// The reservation to be edited, if any.
   final Reservation? reservation;
 
   ReservationFormScreen({this.reservation});
@@ -58,6 +62,7 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
     super.dispose();
   }
 
+  /// Loads the list of customers and flights from their respective providers.
   Future<void> loadData() async {
     final customerProvider = Provider.of<CustomerProvider>(context, listen: false);
     final flightProvider = Provider.of<FlightProvider>(context, listen: false);
@@ -67,6 +72,7 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
     setState(() {});
   }
 
+  /// Checks for and applies autofill data from encrypted shared preferences.
   Future<void> _checkForAutofill() async {
     final storedName = await encryptedSharedPreferences.getString('reservation_name');
     if (storedName != null && storedName.isNotEmpty) {
@@ -202,6 +208,10 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
     );
   }
 
+  /// Displays a dialog with instructions for using the reservation form.
+  ///
+  /// [context] - The build context to use for showing the dialog.
+  /// [localizations] - Provides localized strings for the dialog content.
   void _showInstructionsDialog(BuildContext context, AppLocalizations localizations) {
     showDialog(
       context: context,
@@ -222,6 +232,15 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
     );
   }
 
+  /// Builds a dropdown field for selecting an item from a list.
+  ///
+  /// [localizations] - Provides localized strings for the dropdown label.
+  /// [label] - The label for the dropdown field.
+  /// [items] - The list of items to display in the dropdown.
+  /// [onChanged] - Callback for when an item is selected.
+  /// [displayValue] - Function to get the display value of an item.
+  /// [validator] - Optional validator function for the dropdown.
+  /// [initialValue] - The initial value for the dropdown.
   Widget buildDropdownField<T>(
       AppLocalizations localizations,
       String label,
@@ -245,6 +264,9 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
     );
   }
 
+  /// Builds a date picker field for selecting a date.
+  ///
+  /// [localizations] - Provides localized strings for the date picker label.
   Widget buildDatePicker(AppLocalizations localizations) {
     return Row(
       children: [
@@ -278,6 +300,10 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
     );
   }
 
+  /// Builds a submit button for the form.
+  ///
+  /// [context] - The build context to use for form submission.
+  /// [localizations] - Provides localized strings for the button text.
   Widget buildSubmitButton(BuildContext context, AppLocalizations localizations) {
     return ElevatedButton(
       onPressed: () async {
@@ -307,6 +333,10 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
     );
   }
 
+  /// Returns the first element that matches the given test function, or null if no match is found.
+  ///
+  /// [items] - The list of items to search through.
+  /// [test] - The test function to apply to each item.
   T? firstWhereOrNull<T>(List<T> items, bool Function(T) test) {
     for (var item in items) {
       if (test(item)) {

@@ -6,12 +6,13 @@ import 'l10n/app_localizations.dart';
 import 'l10n/localization_delegate.dart';
 import 'providers/airplane_provider.dart';
 import 'providers/customer_provider.dart';
-import 'providers/flight_provider.dart';  // Import the FlightProvider
-import 'providers/locale_provider.dart';  // Import the LocaleProvider
+import 'providers/flight_provider.dart';
 import 'providers/reservation_provider.dart';
 import 'screens/airplane_list_screen.dart';
 import 'screens/customer_list_screen.dart';
-import 'screens/flight_list_screen.dart';  // Import the FlightListScreen
+import 'screens/flight_list_screen.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
 void main() {
   runApp(
@@ -27,8 +28,13 @@ void main() {
     ),
   );
 }
+Future<void> deleteDatabaseFile() async {
+  String path = join(await getDatabasesPath(), 'airplanes.db');
+  await deleteDatabase(path);
+}
 
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     final localeProvider = Provider.of<LocaleProvider>(context);

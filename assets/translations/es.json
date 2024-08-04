@@ -61,7 +61,7 @@
   "reservationListInstructions": "Presione un elemento para editar o eliminar, presione + para agregar una nueva reserva.",
   "reservationFormInstructions": "Establezca su reserva y presione enviar para agregarla a la lista.",
   "confirmDelete": "Confirmar Eliminación",
-  "areYouSure": "¿Está seguro de que desea eliminar esta reserva?",
+  "areYouSure": "¿Estás seguro de que quieres eliminar este elemento?",
   "cancel": "Cancelar",
   "gotoReservationApp": "Ir a la Aplicación de Reservas",
   "reservation": "Reserva",

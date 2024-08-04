@@ -185,50 +185,91 @@ class ReservationDetail extends StatelessWidget {
       margin: EdgeInsets.all(16.0),
       child: Padding(
         padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '${localizations.translate('reservation') ?? 'Reservation'}: ${reservation.name}',
-              style: Theme.of(context).textTheme.headline6,
-            ),
-            SizedBox(height: 8.0),
-            FutureBuilder<Flight?>(
-              future: flightProvider.getFlightById(reservation.flightId),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Text('Loading flight...');
-                } else if (snapshot.hasError) {
-                  return Text('Error loading flight');
-                } else if (!snapshot.hasData) {
-                  return Text('Flight not found');
-                } else {
-                  final flight = snapshot.data!;
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('${localizations.translate('departureCity')}: ${flight.departureCity ?? 'Unknown'}'),
-                      Text('${localizations.translate('destinationCity')}: ${flight.destinationCity ?? 'Unknown'}'),
-                      Text('${localizations.translate('departureTime')}: ${flight.departureTime ?? 'Unknown'}'),
-                      Text('${localizations.translate('arrivalTime')}: ${flight.arrivalTime ?? 'Unknown'}'),
-                    ],
+        child: SingleChildScrollView( // Wrap the Column in SingleChildScrollView
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '${localizations.translate('reservation') ?? 'Reservation'}: ${reservation.name}',
+                style: Theme.of(context).textTheme.headline6,
+              ),
+              SizedBox(height: 8.0),
+              FutureBuilder<Flight?>(
+                future: flightProvider.getFlightById(reservation.flightId),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Text('Loading flight...');
+                  } else if (snapshot.hasError) {
+                    return Text('Error loading flight');
+                  } else if (!snapshot.hasData) {
+                    return Text('Flight not found');
+                  } else {
+                    final flight = snapshot.data!;
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('${localizations.translate('departureCity')}: ${flight.departureCity ?? 'Unknown'}'),
+                        Text('${localizations.translate('destinationCity')}: ${flight.destinationCity ?? 'Unknown'}'),
+                        Text('${localizations.translate('departureTime')}: ${flight.departureTime ?? 'Unknown'}'),
+                        Text('${localizations.translate('arrivalTime')}: ${flight.arrivalTime ?? 'Unknown'}'),
+                      ],
+                    );
+                  }
+                },
+              ),
+              SizedBox(height: 20.0),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ReservationFormScreen(reservation: reservation),
+                    ),
                   );
-                }
-              },
-            ),
-            SizedBox(height: 20.0),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ReservationFormScreen(reservation: reservation),
-                  ),
-                );
-              },
-              child: Text(localizations.translate('edit')!),
-            ),
-          ],
+                },
+                child: Text(localizations.translate('edit')!),
+              ),
+              SizedBox(height: 8.0),
+              ElevatedButton(
+                onPressed: () {
+                  // Show the confirmation dialog
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text(localizations.translate('confirmDelete') ?? 'Confirm Delete'),
+                        content: Text(localizations.translate('areYouSure') ?? 'Are you sure you want to delete this reservation?'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop(); // Close the dialog
+                            },
+                            child: Text(localizations.translate('cancel') ?? 'Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              // Delete the reservation and pop the screen
+                              final reservationProvider = Provider.of<ReservationProvider>(context, listen: false);
+                              if (reservation.id != null) {
+                                reservationProvider.deleteReservation(reservation.id!);
+                                Navigator.of(context).pop(); // Close the dialog
+                                Navigator.of(context).pop(); // Pop the screen
+                              }
+                            },
+                            child: Text(localizations.translate('delete') ?? 'Delete'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Text(localizations.translate('delete') ?? 'Delete'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red, // Color for the delete button
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

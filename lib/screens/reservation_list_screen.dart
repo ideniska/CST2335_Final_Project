@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../models/customer.dart';
+import '../models/flight.dart';
 import '../providers/reservation_provider.dart';
 import '../models/reservation.dart';
 import '../l10n/app_localizations.dart';
 import 'reservation_form_screen.dart';
+import '../providers/customer_provider.dart';
+import '../providers/flight_provider.dart';
 
 class ReservationListScreen extends StatefulWidget {
   @override
@@ -149,6 +153,9 @@ class ReservationDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
 
+    final customerProvider = Provider.of<CustomerProvider>(context, listen: false);
+    final flightProvider = Provider.of<FlightProvider>(context, listen: false);
+
     return Card(
       margin: EdgeInsets.all(16.0),
       child: Padding(
@@ -156,12 +163,34 @@ class ReservationDetail extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Reservation ID: ${reservation.id}', style: Theme.of(context).textTheme.headline6),
+            Text(
+              'Reservation: ${reservation.name}',
+              style: Theme.of(context).textTheme.headline6,
+            ),
             SizedBox(height: 8.0),
-            Text('${localizations.translate('customerId')}: ${reservation.customerId}'),
-            Text('${localizations.translate('flightId')}: ${reservation.flightId}'),
-            Text('${localizations.translate('date')}: ${reservation.date.toLocal()}'),
-            Text('${localizations.translate('name')}: ${reservation.name}'),
+            FutureBuilder<Flight?>(
+              future: flightProvider.getFlightById(reservation.flightId),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Text('Loading flight...');
+                } else if (snapshot.hasError) {
+                  return Text('Error loading flight');
+                } else if (!snapshot.hasData) {
+                  return Text('Flight not found');
+                } else {
+                  final flight = snapshot.data!;
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('${localizations.translate('departureCity')}: ${flight.departureCity ?? 'Unknown'}'),
+                      Text('${localizations.translate('destinationCity')}: ${flight.destinationCity ?? 'Unknown'}'),
+                      Text('${localizations.translate('departureTime')}: ${flight.departureTime ?? 'Unknown'}'),
+                      Text('${localizations.translate('arrivalTime')}: ${flight.arrivalTime ?? 'Unknown'}'),
+                    ],
+                  );
+                }
+              },
+            ),
             SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {

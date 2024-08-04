@@ -30,4 +30,13 @@ class CustomerProvider with ChangeNotifier {
     await dbHelper.deleteCustomer(id);
     await loadCustomers();
   }
+
+  Future<Customer?> getCustomerById(int id) async {
+    final customers = await dbHelper.getCustomers();
+    try {
+      return customers.firstWhere((customer) => customer.id == id);
+    } catch (e) {
+      return null; // Return null if not found
+    }
+  }
 }

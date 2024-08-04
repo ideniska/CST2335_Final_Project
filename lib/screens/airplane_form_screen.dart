@@ -252,6 +252,9 @@ class _AirplaneFormScreenState extends State<AirplaneFormScreen> {
           );
           await Provider.of<AirplaneProvider>(context, listen: false).addAirplane(newAirplane);
           Navigator.of(context).pop();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(localizations.translate('airplaneAdded')!)),
+          );
         }
       },
       child: Text(localizations.translate('submit')!),

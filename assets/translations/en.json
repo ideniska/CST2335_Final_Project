@@ -76,5 +76,6 @@
   "airplaneFormInstruction2": "Click add",
   "airplaneFormInstruction3": "Click add",
   "airplaneFormInstruction4": "Click add",
-  "airplaneDetails": "Airplane details"
+  "airplaneDetails": "Airplane details",
+  "airplaneAdded": "Airplane added successfully"
 }

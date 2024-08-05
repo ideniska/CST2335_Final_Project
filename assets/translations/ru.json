@@ -1,5 +1,5 @@
 {
-  "mainMenu": "Главное меню",
+  "mainMenu": "CST2335 Бронирование полетов 1.0",
   "goToAirplaneApp": "Перейти к приложению для самолетов",
   "goToCustomerApp": "Перейти к приложению для клиентов",
   "goToFlightListApp": "Перейти к списку рейсов",
@@ -79,4 +79,6 @@
   "customerAdded": "Клиент успешно добавлен",
   "customerUpdated": "Клиент успешно обновлен",
   "customerDeleted": "Клиент успешно удален"
+  "airplaneAdded": "Cамолет добавлен успешно",
+  "flightAdded": "Полет добавлен успешно"
 }

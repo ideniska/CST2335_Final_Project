@@ -1,5 +1,5 @@
 {
-  "mainMenu": "Main Menu",
+  "mainMenu": "CST2335 Flight booking app 1.0",
   "goToAirplaneApp": "Go to Airplane App",
   "goToCustomerApp": "Go to Customer App",
   "goToFlightListApp": "Go to Flight List App",
@@ -80,4 +80,6 @@
   "customerAdded": "Customer added successfully",
   "customerUpdated": "Customer updated successfully",
   "customerDeleted": "Customer deleted successfully"
+  "airplaneAdded": "Airplane added successfully",
+  "flightAdded": "Flight added successfully"
 }

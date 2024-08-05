@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
-import '../models/flight.dart';
 import '../providers/flight_provider.dart';
 import 'flight_form_screen.dart';
 
+/// A screen that displays a list of flights.
 class FlightListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -13,14 +13,7 @@ class FlightListScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(localizations.translate('flights')!),
         actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => FlightFormScreen()),
-              );
-            },
-          ),
+          buildInfoButton(context, localizations),
         ],
       ),
       body: FutureBuilder(
@@ -29,7 +22,6 @@ class FlightListScreen extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            // Highlighted: Use localized strings
             return Center(child: Text(localizations.translate('errorLoadingFlights')!));
           } else {
             return Consumer<FlightProvider>(
@@ -40,13 +32,6 @@ class FlightListScreen extends StatelessWidget {
                   return ListTile(
                     title: Text('${flight.departureCity} to ${flight.destinationCity}'),
                     subtitle: Text('${flight.departureTime} to ${flight.arrivalTime}'),
-                    trailing: IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () {
-                        Provider.of<FlightProvider>(context, listen: false).deleteFlight(flight.id!);
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(localizations.translate('flightRemoved')!)));
-                      },
-                    ),
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -61,6 +46,53 @@ class FlightListScreen extends StatelessWidget {
           }
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => FlightFormScreen()),
+          );
+        },
+        child: Icon(Icons.add),
+      ),
+
     );
   }
+}
+
+/// Builds an info button that shows a dialog with instructions when pressed.
+IconButton buildInfoButton(BuildContext context, AppLocalizations localizations) {
+  return IconButton(
+    icon: Icon(Icons.info),
+    onPressed: () {
+      // Show a dialog with instructions
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(localizations.translate('instructions')!),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(localizations.translate('appInstruction1')!),
+              SizedBox(height: 8),
+              Text(localizations.translate('appInstruction2')!),
+              SizedBox(height: 8),
+              Text(localizations.translate('appInstruction3')!),
+              SizedBox(height: 8),
+              Text(localizations.translate('appInstruction4')!),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(localizations.translate('ok')!),
+            ),
+          ],
+        ),
+      );
+    },
+  );
 }

@@ -77,6 +77,9 @@
   "airplaneFormInstruction3": "Click add",
   "airplaneFormInstruction4": "Click add",
   "airplaneDetails": "Airplane details",
+  "customerAdded": "Customer added successfully",
+  "customerUpdated": "Customer updated successfully",
+  "customerDeleted": "Customer deleted successfully"
   "airplaneAdded": "Airplane added successfully",
   "flightAdded": "Flight added successfully"
 }

@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/flight.dart';
 import '../providers/flight_provider.dart';
-import '../providers/locale_provider.dart';  // Add this line
 import '../l10n/app_localizations.dart';
 import '../l10n/localization_delegate.dart';
 
+/// A screen for adding or editing a flight.
 class FlightFormScreen extends StatefulWidget {
+  /// The flight to edit.
   final Flight? flight;
 
+  /// Creates a [FlightFormScreen].
   FlightFormScreen({this.flight});
 
   @override
@@ -35,6 +37,7 @@ class _FlightFormScreenState extends State<FlightFormScreen> {
     super.initState();
   }
 
+  /// Saves the form data and updates or adds the flight.
   void _saveForm() {
     final localizations = AppLocalizations.of(context);
     if (_formKey.currentState!.validate()) {
@@ -63,10 +66,7 @@ class _FlightFormScreenState extends State<FlightFormScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.flight == null ? localizations.translate('addFlight') ?? 'Add Flight' : localizations.translate('editFlight') ?? 'Edit Flight'),
-        actions: [
-          buildLanguageDropdown(context),
-          buildInfoButton(context, localizations),
-        ],
+
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -87,61 +87,9 @@ class _FlightFormScreenState extends State<FlightFormScreen> {
     );
   }
 
-  DropdownButton<Locale> buildLanguageDropdown(BuildContext context) {
-    final localeProvider = Provider.of<LocaleProvider>(context);
-    return DropdownButton<Locale>(
-      value: localeProvider.locale,
-      icon: Icon(Icons.language, color: Colors.white),
-      items: L10n.all.map((locale) {
-        final flag = L10n.getFlag(locale.languageCode);
-        return DropdownMenuItem(
-          child: Center(child: Text(flag, style: TextStyle(fontSize: 24))),
-          value: locale,
-          onTap: () {
-            localeProvider.setLocale(locale);
-          },
-        );
-      }).toList(),
-      onChanged: (_) {},
-    );
-  }
 
-  IconButton buildInfoButton(BuildContext context, AppLocalizations localizations) {
-    return IconButton(
-      icon: Icon(Icons.info),
-      onPressed: () {
-        // Show a dialog with instructions
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text(localizations.translate('instructions')!),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(localizations.translate('appInstruction1')!),
-                SizedBox(height: 8),
-                Text(localizations.translate('appInstruction2')!),
-                SizedBox(height: 8),
-                Text(localizations.translate('appInstruction3')!),
-                SizedBox(height: 8),
-                Text(localizations.translate('appInstruction4')!),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(localizations.translate('ok')!),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
 
+  /// Builds a text form field with validation and saving logic.
   TextFormField buildTextFormField(AppLocalizations localizations, String label, String initialValue, Function(String?) onSaved, {TextInputType keyboardType = TextInputType.text}) {
     return TextFormField(
       initialValue: initialValue,
@@ -163,6 +111,7 @@ class _FlightFormScreenState extends State<FlightFormScreen> {
     );
   }
 
+  /// Builds a row of buttons for submitting, updating, or deleting the form.
   Row buildButtonRow(BuildContext context, AppLocalizations localizations, bool isEditing) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -174,6 +123,7 @@ class _FlightFormScreenState extends State<FlightFormScreen> {
     );
   }
 
+  /// Builds a button for updating an existing flight.
   ElevatedButton buildEditButton(BuildContext context, AppLocalizations localizations) {
     return ElevatedButton(
       onPressed: () {
@@ -183,6 +133,7 @@ class _FlightFormScreenState extends State<FlightFormScreen> {
     );
   }
 
+  /// Builds a button for deleting an existing flight.
   ElevatedButton buildDeleteButton(BuildContext context, AppLocalizations localizations) {
     return ElevatedButton(
       onPressed: () async {
@@ -217,10 +168,14 @@ class _FlightFormScreenState extends State<FlightFormScreen> {
     );
   }
 
+  /// Builds a button for submitting a new flight.
   ElevatedButton buildSubmitButton(BuildContext context, AppLocalizations localizations) {
     return ElevatedButton(
       onPressed: () {
         _saveForm();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(localizations.translate('flightAdded')!)),
+        );
       },
       child: Text(localizations.translate('submit')!),
     );

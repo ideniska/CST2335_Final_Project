@@ -5,11 +5,13 @@ import 'airplane_form_screen.dart';
 import '../models/airplane.dart';
 import '../l10n/app_localizations.dart';
 
+/// A screen that displays a list of airplanes.
 class AirplaneListScreen extends StatefulWidget {
   @override
   AirplaneListScreenState createState() => AirplaneListScreenState();
 }
 
+/// The state for the [AirplaneListScreen].
 class AirplaneListScreenState extends State<AirplaneListScreen> {
   Airplane? selectedAirplane;
 
@@ -27,7 +29,11 @@ class AirplaneListScreenState extends State<AirplaneListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.translate('airplanes')!),
+        actions: [
+          buildInfoButton(context, localizations),
+        ],
       ),
+
       body: OrientationBuilder(
         builder: (context, orientation) {
           return buildBody(airplaneProvider, localizations, orientation);
@@ -45,6 +51,44 @@ class AirplaneListScreenState extends State<AirplaneListScreen> {
     );
   }
 
+  /// Builds an info button that shows a dialog with instructions when pressed.
+  IconButton buildInfoButton(BuildContext context, AppLocalizations localizations) {
+    return IconButton(
+      icon: Icon(Icons.info),
+      onPressed: () {
+        // Show a dialog with instructions
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(localizations.translate('instructions')!),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(localizations.translate('airplaneFormInstruction1')!),
+                SizedBox(height: 8),
+                Text(localizations.translate('airplaneFormInstruction2')!),
+                SizedBox(height: 8),
+                Text(localizations.translate('airplaneFormInstruction3')!),
+                SizedBox(height: 8),
+                Text(localizations.translate('airplaneFormInstruction4')!),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(localizations.translate('ok')!),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  /// Builds the body of the screen based on the orientation.
   Widget buildBody(AirplaneProvider airplaneProvider, AppLocalizations localizations, Orientation orientation) {
     return airplaneProvider.airplanes.isEmpty
         ? Center(child: Text(localizations.translate('noItemsAvailable')!))
@@ -59,6 +103,7 @@ class AirplaneListScreenState extends State<AirplaneListScreen> {
     );
   }
 
+  /// Builds the layout for tablet devices.
   Widget buildTabletLayout(AirplaneProvider airplaneProvider, AppLocalizations localizations) {
     return Row(
       children: [
@@ -87,6 +132,7 @@ class AirplaneListScreenState extends State<AirplaneListScreen> {
     );
   }
 
+  /// Builds the layout for mobile devices.
   Widget buildMobileLayout(AirplaneProvider airplaneProvider, AppLocalizations localizations) {
     return ListView.builder(
       itemCount: airplaneProvider.airplanes.length,
@@ -109,9 +155,11 @@ class AirplaneListScreenState extends State<AirplaneListScreen> {
   }
 }
 
+/// A widget that displays the details of an airplane.
 class AirplaneDetail extends StatelessWidget {
   final Airplane airplane;
 
+  /// Creates an [AirplaneDetail] widget.
   const AirplaneDetail({required this.airplane});
 
   @override

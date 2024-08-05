@@ -67,10 +67,8 @@
   "reservation": "Резервация",
   "autofillPrompt": "Вы хотите автоматически заполнить поле имени?",
   "autofill": "Автозаполнение",
-  "airplaneFormInstruction1": "Нажмите добавить",
-  "airplaneFormInstruction2": "Нажмите добавить",
-  "airplaneFormInstruction3": "Нажмите добавить",
-  "airplaneFormInstruction4": "Нажмите добавить",
+  "airplaneFormInstruction1": "Нажмите добавить, чтобы добавить самолет",
+  "airplaneFormInstruction2": "Нажмите на самолет, чтобы увидеть детали",
   "instructions": "Инструкции",
   "appInstruction1": "Нажмите на приложение для самолетов, чтобы добавить новые самолеты.",
   "appInstruction2": "Нажмите на приложение для клиентов, чтобы добавить нового клиента.",
@@ -82,5 +80,10 @@
   "customerUpdated": "Клиент успешно обновлен",
   "customerDeleted": "Клиент успешно удален",
   "airplaneAdded": "Cамолет добавлен успешно",
-  "flightAdded": "Полет добавлен успешно"
+  "flightAdded": "Полет добавлен успешно",
+  "customerFormInstruction1": "Нажмите добавить, чтобы добавить клиента",
+  "customerFormInstruction2": "Нажмите на клиента, чтобы увидеть детали",
+  "flightInstruction1": "Нажмите добавить, чтобы добавить рейс",
+  "flightInstruction2": "Нажмите на рейс, чтобы увидеть детали"
+
 }

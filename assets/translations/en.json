@@ -54,7 +54,7 @@
   "noReservations": "No Reservations",
   "editReservation": "Edit Reservation",
   "addReservation": "Add Reservation",
-  "reservationListInstructions": "Press an item to edit or delete, Press + to add a new reservation.",
+  "reservationListInstructions": "Press + to add a new reservation.",
   "reservationFormInstructions": "Set your reservation and press submit to add it to the list.",
   "pleaseEnterName": "Please enter a name",
   "pleaseSelectCustomer": "Please select a customer",
@@ -72,16 +72,18 @@
   "appInstruction2": "Click on Customer App to add a new customer.",
   "appInstruction3": "Click on Flight List App to add a new Flight.",
   "appInstruction4": "Click on Reservation App to create a new reservation based on customers and available flights.",
-  "airplaneFormInstruction1": "Click add",
-  "airplaneFormInstruction2": "Click add",
-  "airplaneFormInstruction3": "Click add",
-  "airplaneFormInstruction4": "Click add",
+  "airplaneFormInstruction1": "Press + to add an airplane",
+  "airplaneFormInstruction2": "Click on an airplane to see details",
+  "customerFormInstruction1": "Press + to add a customer",
+  "customerFormInstruction2": "Click on a customer to see details",
+  "flightInstruction1": "Click add to add a flight",
+  "flightInstruction2": "Click on a flight to see details",
   "airplaneDetails": "Airplane details",
   "submissionSuccess": "Reservation submitted successfully",
-  "dismiss": "Dismiss"
+  "dismiss": "Dismiss",
   "customerAdded": "Customer added successfully",
   "customerUpdated": "Customer updated successfully",
-  "customerDeleted": "Customer deleted successfully"
+  "customerDeleted": "Customer deleted successfully",
   "airplaneAdded": "Airplane added successfully",
   "flightAdded": "Flight added successfully"
 }

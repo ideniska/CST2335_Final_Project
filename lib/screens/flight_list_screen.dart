@@ -74,13 +74,10 @@ IconButton buildInfoButton(BuildContext context, AppLocalizations localizations)
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(localizations.translate('appInstruction1')!),
+              Text(localizations.translate('flightInstruction1')!),
               SizedBox(height: 8),
-              Text(localizations.translate('appInstruction2')!),
+              Text(localizations.translate('flightInstruction2')!),
               SizedBox(height: 8),
-              Text(localizations.translate('appInstruction3')!),
-              SizedBox(height: 8),
-              Text(localizations.translate('appInstruction4')!),
             ],
           ),
           actions: [

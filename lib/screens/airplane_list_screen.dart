@@ -69,9 +69,6 @@ class AirplaneListScreenState extends State<AirplaneListScreen> {
                 SizedBox(height: 8),
                 Text(localizations.translate('airplaneFormInstruction2')!),
                 SizedBox(height: 8),
-                Text(localizations.translate('airplaneFormInstruction3')!),
-                SizedBox(height: 8),
-                Text(localizations.translate('airplaneFormInstruction4')!),
               ],
             ),
             actions: [

@@ -67,10 +67,8 @@
   "reservation": "Reserva",
   "autofillPrompt": "¿Te gustaría rellenar automáticamente el campo del nombre?",
   "autofill": "Rellenar automáticamente",
-  "airplaneFormInstruction1": "Haga clic",
-  "airplaneFormInstruction2": "Haga clic",
-  "airplaneFormInstruction3": "Haga clic",
-  "airplaneFormInstruction4": "Haga clic",
+  "airplaneFormInstruction1": "Haz clic en agregar para añadir un avión",
+  "airplaneFormInstruction2": "Haz clic en un avión para ver los detalles",
   "instructions": "Instrucciones",
   "appInstruction1": "Haga clic en la aplicación de avión para agregar nuevos aviones.",
   "appInstruction2": "Haga clic en la aplicación de cliente para agregar un nuevo cliente.",
@@ -80,7 +78,12 @@
   "dismiss": "Descartar",
   "customerAdded": "Cliente agregado con éxito",
   "customerUpdated": "Cliente actualizado con éxito",
-  "customerDeleted": "Cliente eliminado con éxito"
+  "customerDeleted": "Cliente eliminado con éxito",
   "airplaneAdded": "Avión añadido con éxito",
-  "flightAdded": "Vuelo añadido con éxito"
+  "flightAdded": "Vuelo añadido con éxito",
+  "customerFormInstruction1": "Haz clic en agregar para añadir un cliente",
+  "customerFormInstruction2": "Haz clic en un cliente para ver los detalles",
+  "flightInstruction1": "Haz clic en agregar para añadir un vuelo",
+  "flightInstruction2": "Haz clic en un vuelo para ver los detalles"
+
 }

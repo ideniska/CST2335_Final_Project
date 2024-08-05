@@ -27,6 +27,9 @@ class CustomerListScreenState extends State<CustomerListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.translate('customers')!),
+        actions: [
+          buildInfoButton(context, localizations),
+        ],
       ),
       body: OrientationBuilder(
         builder: (context, orientation) {
@@ -100,6 +103,40 @@ class CustomerListScreenState extends State<CustomerListScreen> {
             child: CustomerDetail(customer: selectedCustomer!),
           ),
       ],
+    );
+  }
+
+  /// Builds an info button that shows a dialog with instructions when pressed.
+  IconButton buildInfoButton(BuildContext context, AppLocalizations localizations) {
+    return IconButton(
+      icon: Icon(Icons.info),
+      onPressed: () {
+        // Show a dialog with instructions
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(localizations.translate('instructions')!),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(localizations.translate('customerFormInstruction1')!),
+                SizedBox(height: 8),
+                Text(localizations.translate('customerFormInstruction2')!),
+                SizedBox(height: 8),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(localizations.translate('ok')!),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 

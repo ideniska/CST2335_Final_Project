@@ -51,7 +51,7 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
         title: Text(localizations.translate('reservations') ?? 'Reservations'),
         actions: [
           IconButton(
-            icon: Icon(Icons.help),
+            icon: Icon(Icons.info),
             onPressed: () {
               _showInstructionsDialog(context, localizations);
             },

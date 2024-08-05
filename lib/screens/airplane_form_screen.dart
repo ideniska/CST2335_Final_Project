@@ -4,7 +4,6 @@ import '../models/airplane.dart';
 import '../providers/airplane_provider.dart';
 import '../l10n/app_localizations.dart';
 import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
-import '../l10n/localization_delegate.dart';
 
 /// A screen for adding or editing an airplane.
 class AirplaneFormScreen extends StatefulWidget {

@@ -67,20 +67,23 @@ class _AirplaneFormScreenState extends State<AirplaneFormScreen> {
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
-        child: Form(
-          key: formKey,
-          child: Column(
-            children: [
-              buildTextFormField(localizations, 'type', type, (value) => type = value!),
-              buildTextFormField(localizations, 'passengers', passengers.toString(), (value) => passengers = int.parse(value!), keyboardType: TextInputType.number),
-              buildTextFormField(localizations, 'maxSpeed', maxSpeed.toString(), (value) => maxSpeed = double.parse(value!), keyboardType: TextInputType.number),
-              buildTextFormField(localizations, 'range', range.toString(), (value) => range = double.parse(value!), keyboardType: TextInputType.number),
-              SizedBox(height: 20),
-              buildButtonRow(context, localizations, isEditing),
-            ],
+        child: SingleChildScrollView( // Added SingleChildScrollView
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                buildTextFormField(localizations, 'type', type, (value) => type = value!),
+                buildTextFormField(localizations, 'passengers', passengers.toString(), (value) => passengers = int.parse(value!), keyboardType: TextInputType.number),
+                buildTextFormField(localizations, 'maxSpeed', maxSpeed.toString(), (value) => maxSpeed = double.parse(value!), keyboardType: TextInputType.number),
+                buildTextFormField(localizations, 'range', range.toString(), (value) => range = double.parse(value!), keyboardType: TextInputType.number),
+                SizedBox(height: 20),
+                buildButtonRow(context, localizations, isEditing),
+              ],
+            ),
           ),
         ),
       ),
+
     );
   }
 

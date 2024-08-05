@@ -39,7 +39,7 @@ class _FlightFormScreenState extends State<FlightFormScreen> {
 
   /// Saves the form data and updates or adds the flight.
   void _saveForm() {
-    final localizations = AppLocalizations.of(context);
+    // final localizations = AppLocalizations.of(context);
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       final flight = Flight(
@@ -61,7 +61,7 @@ class _FlightFormScreenState extends State<FlightFormScreen> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final localeProvider = Provider.of<LocaleProvider>(context);
+    // final localeProvider = Provider.of<LocaleProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -70,20 +70,23 @@ class _FlightFormScreenState extends State<FlightFormScreen> {
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              buildTextFormField(localizations, 'departureCity', _flightData['departureCity']!, (value) => _flightData['departureCity'] = value!),
-              buildTextFormField(localizations, 'destinationCity', _flightData['destinationCity']!, (value) => _flightData['destinationCity'] = value!),
-              buildTextFormField(localizations, 'departureTime', _flightData['departureTime']!, (value) => _flightData['departureTime'] = value!),
-              buildTextFormField(localizations, 'arrivalTime', _flightData['arrivalTime']!, (value) => _flightData['arrivalTime'] = value!),
-              SizedBox(height: 20),
-              buildButtonRow(context, localizations, widget.flight != null),
-            ],
+        child: SingleChildScrollView( // Added SingleChildScrollView
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                buildTextFormField(localizations, 'departureCity', _flightData['departureCity']!, (value) => _flightData['departureCity'] = value!),
+                buildTextFormField(localizations, 'destinationCity', _flightData['destinationCity']!, (value) => _flightData['destinationCity'] = value!),
+                buildTextFormField(localizations, 'departureTime', _flightData['departureTime']!, (value) => _flightData['departureTime'] = value!),
+                buildTextFormField(localizations, 'arrivalTime', _flightData['arrivalTime']!, (value) => _flightData['arrivalTime'] = value!),
+                SizedBox(height: 20),
+                buildButtonRow(context, localizations, widget.flight != null),
+              ],
+            ),
           ),
         ),
       ),
+
     );
   }
 

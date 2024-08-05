@@ -26,6 +26,11 @@ class _AirplaneFormScreenState extends State<AirplaneFormScreen> {
   late double maxSpeed;
   late double range;
 
+  late TextEditingController typeController;
+  late TextEditingController passengersController;
+  late TextEditingController maxSpeedController;
+  late TextEditingController rangeController;
+
   @override
   void initState() {
     super.initState();
@@ -35,17 +40,62 @@ class _AirplaneFormScreenState extends State<AirplaneFormScreen> {
       maxSpeed = widget.airplane?.maxSpeed ?? 0.0;
       range = widget.airplane?.range ?? 0.0;
     } else {
-      _loadPreviousFields();
+      type = '';
+      passengers = 0;
+      maxSpeed = 0.0;
+      range = 0.0;
+      promptUsePreviousData();
     }
+    typeController = TextEditingController(text: type);
+    passengersController = TextEditingController(text: passengers.toString());
+    maxSpeedController = TextEditingController(text: maxSpeed.toString());
+    rangeController = TextEditingController(text: range.toString());
   }
 
-  /// Loads previously saved form fields from encrypted shared preferences.
-  Future<void> _loadPreviousFields() async {
-    type = await encryptedPrefs.getString('type') ?? '';
-    passengers = int.tryParse(await encryptedPrefs.getString('passengers') ?? '0') ?? 0;
-    maxSpeed = double.tryParse(await encryptedPrefs.getString('maxSpeed') ?? '0.0') ?? 0.0;
-    range = double.tryParse(await encryptedPrefs.getString('range') ?? '0.0') ?? 0.0;
-    setState(() {});
+  @override
+  void dispose() {
+    typeController.dispose();
+    passengersController.dispose();
+    maxSpeedController.dispose();
+    rangeController.dispose();
+    super.dispose();
+  }
+
+  /// Prompts the user to use previous airplane data if available.
+  Future<void> promptUsePreviousData() async {
+    final type = await encryptedPrefs.getString('type');
+    if (type != null) {
+      bool useData = await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(AppLocalizations.of(context)?.translate('usePreviousData') ?? 'Use previous airplane data?'),
+          content: Text(AppLocalizations.of(context)?.translate('reuseDataMessage') ?? 'Do you want to reuse the data of the last airplane you entered?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(AppLocalizations.of(context)?.translate('no') ?? 'No'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(AppLocalizations.of(context)?.translate('yes') ?? 'Yes'),
+            ),
+          ],
+        ),
+      );
+
+      if (useData) {
+        setState(() async {
+          this.type = type;
+          passengers = int.tryParse(await encryptedPrefs.getString('passengers') ?? '0') ?? 0;
+          maxSpeed = double.tryParse(await encryptedPrefs.getString('maxSpeed') ?? '0.0') ?? 0.0;
+          range = double.tryParse(await encryptedPrefs.getString('range') ?? '0.0') ?? 0.0;
+          typeController.text = this.type;
+          passengersController.text = passengers.toString();
+          maxSpeedController.text = maxSpeed.toString();
+          rangeController.text = range.toString();
+        });
+      }
+    }
   }
 
   /// Saves the current form fields to encrypted shared preferences.
@@ -67,15 +117,15 @@ class _AirplaneFormScreenState extends State<AirplaneFormScreen> {
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
-        child: SingleChildScrollView( // Added SingleChildScrollView
+        child: SingleChildScrollView(
           child: Form(
             key: formKey,
             child: Column(
               children: [
-                buildTextFormField(localizations, 'type', type, (value) => type = value!),
-                buildTextFormField(localizations, 'passengers', passengers.toString(), (value) => passengers = int.parse(value!), keyboardType: TextInputType.number),
-                buildTextFormField(localizations, 'maxSpeed', maxSpeed.toString(), (value) => maxSpeed = double.parse(value!), keyboardType: TextInputType.number),
-                buildTextFormField(localizations, 'range', range.toString(), (value) => range = double.parse(value!), keyboardType: TextInputType.number),
+                buildTextFormField(localizations, 'type', typeController, (value) => type = value!),
+                buildTextFormField(localizations, 'passengers', passengersController, (value) => passengers = int.parse(value!), keyboardType: TextInputType.number),
+                buildTextFormField(localizations, 'maxSpeed', maxSpeedController, (value) => maxSpeed = double.parse(value!), keyboardType: TextInputType.number),
+                buildTextFormField(localizations, 'range', rangeController, (value) => range = double.parse(value!), keyboardType: TextInputType.number),
                 SizedBox(height: 20),
                 buildButtonRow(context, localizations, isEditing),
               ],
@@ -90,9 +140,9 @@ class _AirplaneFormScreenState extends State<AirplaneFormScreen> {
 
 
   /// Builds a text form field with validation and saving logic.
-  TextFormField buildTextFormField(AppLocalizations localizations, String label, String initialValue, Function(String?) onSaved, {TextInputType keyboardType = TextInputType.text}) {
+  TextFormField buildTextFormField(AppLocalizations localizations, String label, TextEditingController controller, Function(String?) onSaved, {TextInputType keyboardType = TextInputType.text}) {
     return TextFormField(
-      initialValue: initialValue,
+      controller: controller,
       decoration: InputDecoration(labelText: localizations.translate(label) ?? label),
       keyboardType: keyboardType,
       validator: (value) {

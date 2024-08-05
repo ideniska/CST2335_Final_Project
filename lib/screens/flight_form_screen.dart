@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import '../models/flight.dart';
 import '../providers/flight_provider.dart';
 import '../l10n/app_localizations.dart';
-import '../l10n/localization_delegate.dart';
+import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 
 /// A screen for adding or editing a flight.
 class FlightFormScreen extends StatefulWidget {
@@ -19,49 +19,124 @@ class FlightFormScreen extends StatefulWidget {
 
 class _FlightFormScreenState extends State<FlightFormScreen> {
   final _formKey = GlobalKey<FormState>();
-  final Map<String, String> _flightData = {
-    'departureCity': '',
-    'destinationCity': '',
-    'departureTime': '',
-    'arrivalTime': ''
-  };
+  final encryptedPrefs = EncryptedSharedPreferences();
+
+  late String departureCity;
+  late String destinationCity;
+  late String departureTime;
+  late String arrivalTime;
+
+  late TextEditingController departureCityController;
+  late TextEditingController destinationCityController;
+  late TextEditingController departureTimeController;
+  late TextEditingController arrivalTimeController;
+
 
   @override
   void initState() {
-    if (widget.flight != null) {
-      _flightData['departureCity'] = widget.flight!.departureCity;
-      _flightData['destinationCity'] = widget.flight!.destinationCity;
-      _flightData['departureTime'] = widget.flight!.departureTime;
-      _flightData['arrivalTime'] = widget.flight!.arrivalTime;
-    }
     super.initState();
+    if (widget.flight != null) {
+      departureCity = widget.flight?.departureCity ?? '';
+      destinationCity = widget.flight?.destinationCity ?? '';
+      departureTime = widget.flight?.departureTime ?? '';
+      arrivalTime = widget.flight?.arrivalTime ?? '';
+    } else {
+      departureCity = '';
+      destinationCity = '';
+      departureTime = '';
+      arrivalTime = '';
+      promptUsePreviousData();
+    }
+    departureCityController = TextEditingController(text: departureCity);
+    destinationCityController = TextEditingController(text: destinationCity);
+    departureTimeController = TextEditingController(text: departureTime);
+    arrivalTimeController = TextEditingController(text: arrivalTime);
+  }
+
+  @override
+  void dispose() {
+    departureCityController.dispose();
+    destinationCityController.dispose();
+    departureTimeController.dispose();
+    arrivalTimeController.dispose();
+    super.dispose();
+  }
+
+  /// Prompts the user to use previous flight data if available.
+  Future<void> promptUsePreviousData() async {
+    final previousDepartureCity = await encryptedPrefs.getString('departureCity');
+    if (previousDepartureCity != null && previousDepartureCity.isNotEmpty) {
+      bool useData = await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(AppLocalizations.of(context)?.translate('usePreviousData') ?? 'Use previous flight data?'),
+          content: Text(AppLocalizations.of(context)?.translate('reuseDataMessage') ?? 'Do you want to reuse the data of the last flight you entered?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(AppLocalizations.of(context)?.translate('no') ?? 'No'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(AppLocalizations.of(context)?.translate('yes') ?? 'Yes'),
+            ),
+          ],
+        ),
+      );
+
+      if (useData) {
+        final previousDestinationCity = await encryptedPrefs.getString('destinationCity') ?? '';
+        final previousDepartureTime = await encryptedPrefs.getString('departureTime') ?? '';
+        final previousArrivalTime = await encryptedPrefs.getString('arrivalTime') ?? '';
+
+        setState(() {
+          departureCity = previousDepartureCity;
+          destinationCity = previousDestinationCity;
+          departureTime = previousDepartureTime;
+          arrivalTime = previousArrivalTime;
+          departureCityController.text = departureCity;
+          destinationCityController.text = destinationCity;
+          departureTimeController.text = departureTime;
+          arrivalTimeController.text = arrivalTime;
+        });
+      }
+    }
+  }
+
+
+  /// Saves the current form fields to encrypted shared preferences.
+  Future<void> _saveFields() async {
+    await encryptedPrefs.setString('departureCity', departureCity);
+    await encryptedPrefs.setString('destinationCity', destinationCity);
+    await encryptedPrefs.setString('departureTime', departureTime);
+    await encryptedPrefs.setString('arrivalTime', arrivalTime);
   }
 
   /// Saves the form data and updates or adds the flight.
-  void _saveForm() {
-    // final localizations = AppLocalizations.of(context);
+  void _saveForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       final flight = Flight(
         id: widget.flight?.id,
-        departureCity: _flightData['departureCity']!,
-        destinationCity: _flightData['destinationCity']!,
-        departureTime: _flightData['departureTime']!,
-        arrivalTime: _flightData['arrivalTime']!,
+        departureCity: departureCity,
+        destinationCity: destinationCity,
+        departureTime: departureTime,
+        arrivalTime: arrivalTime,
       );
       if (widget.flight == null) {
         Provider.of<FlightProvider>(context, listen: false).addFlight(flight);
       } else {
         Provider.of<FlightProvider>(context, listen: false).updateFlight(flight);
       }
+      await _saveFields();
       Navigator.of(context).pop();
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    // final localeProvider = Provider.of<LocaleProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -70,15 +145,15 @@ class _FlightFormScreenState extends State<FlightFormScreen> {
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
-        child: SingleChildScrollView( // Added SingleChildScrollView
+        child: SingleChildScrollView(
           child: Form(
             key: _formKey,
             child: Column(
               children: [
-                buildTextFormField(localizations, 'departureCity', _flightData['departureCity']!, (value) => _flightData['departureCity'] = value!),
-                buildTextFormField(localizations, 'destinationCity', _flightData['destinationCity']!, (value) => _flightData['destinationCity'] = value!),
-                buildTextFormField(localizations, 'departureTime', _flightData['departureTime']!, (value) => _flightData['departureTime'] = value!),
-                buildTextFormField(localizations, 'arrivalTime', _flightData['arrivalTime']!, (value) => _flightData['arrivalTime'] = value!),
+                buildTextFormField(localizations, 'departureCity', departureCityController, (value) => departureCity = value!),
+                buildTextFormField(localizations, 'destinationCity', destinationCityController, (value) => destinationCity = value!),
+                buildTextFormField(localizations, 'departureTime', departureTimeController, (value) => departureTime = value!),
+                buildTextFormField(localizations, 'arrivalTime', arrivalTimeController, (value) => arrivalTime = value!),
                 SizedBox(height: 20),
                 buildButtonRow(context, localizations, widget.flight != null),
               ],
@@ -93,9 +168,9 @@ class _FlightFormScreenState extends State<FlightFormScreen> {
 
 
   /// Builds a text form field with validation and saving logic.
-  TextFormField buildTextFormField(AppLocalizations localizations, String label, String initialValue, Function(String?) onSaved, {TextInputType keyboardType = TextInputType.text}) {
+  TextFormField buildTextFormField(AppLocalizations localizations, String label, TextEditingController controller, Function(String?) onSaved, {TextInputType keyboardType = TextInputType.text}) {
     return TextFormField(
-      initialValue: initialValue,
+      controller: controller,
       decoration: InputDecoration(labelText: localizations.translate(label) ?? label),
       keyboardType: keyboardType,
       validator: (value) {

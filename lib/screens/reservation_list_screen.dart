@@ -97,7 +97,7 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: Text(localizations.translate('ok') ?? 'OK'),
             ),
@@ -120,8 +120,8 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
             itemBuilder: (context, index) {
               final reservation = reservationProvider.reservations![index];
               return ListTile(
-                title: Text('${reservation.name}'), // Display the name of the reservation
-                subtitle: Text(dateFormatter.format(reservation.date.toLocal())), // Format the date
+                title: Text('${reservation.name}'),
+                subtitle: Text(dateFormatter.format(reservation.date.toLocal())),
                 onTap: () {
                   setState(() {
                     selectedReservation = reservation;
@@ -149,8 +149,8 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
       itemBuilder: (context, index) {
         final reservation = reservationProvider.reservations![index];
         return ListTile(
-          title: Text('${reservation.name}'), // Display the name of the reservation
-          subtitle: Text(dateFormatter.format(reservation.date.toLocal())), // Format the date
+          title: Text('${reservation.name}'),
+          subtitle: Text(dateFormatter.format(reservation.date.toLocal())),
           onTap: () {
             Navigator.push(
               context,
@@ -185,13 +185,29 @@ class ReservationDetail extends StatelessWidget {
       margin: EdgeInsets.all(16.0),
       child: Padding(
         padding: EdgeInsets.all(16.0),
-        child: SingleChildScrollView( // Wrap the Column in SingleChildScrollView
+        child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 '${localizations.translate('reservation') ?? 'Reservation'}: ${reservation.name}',
                 style: Theme.of(context).textTheme.headline6,
+              ),
+              SizedBox(height: 8.0),
+              FutureBuilder<Customer?>(
+                future: customerProvider.getCustomerById(reservation.customerId),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Text('Loading customer...');
+                  } else if (snapshot.hasError) {
+                    return Text('Error loading customer');
+                  } else if (!snapshot.hasData) {
+                    return Text('Customer not found');
+                  } else {
+                    final customer = snapshot.data!;
+                    return Text('${localizations.translate('customerName') ?? 'Customer Name'}: ${customer.fullName ?? 'Unknown'}');
+                  }
+                },
               ),
               SizedBox(height: 8.0),
               FutureBuilder<Flight?>(
@@ -265,7 +281,7 @@ class ReservationDetail extends StatelessWidget {
                 },
                 child: Text(localizations.translate('delete') ?? 'Delete'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red, // Color for the delete button
+                  backgroundColor: Colors.red,
                 ),
               ),
             ],
@@ -273,5 +289,6 @@ class ReservationDetail extends StatelessWidget {
         ),
       ),
     );
+
   }
 }

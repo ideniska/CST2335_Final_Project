@@ -85,7 +85,7 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
             onPressed: () {
               setState(() {
                 name = storedName;
-                nameController.text = storedName; // Update the controller
+                nameController.text = storedName;
               });
             },
           ),
@@ -196,6 +196,17 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
               // Save the name to encrypted shared preferences
               await encryptedSharedPreferences.setString('reservation_name', name);
 
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(localizations.translate('submissionSuccess') ?? 'Reservation submitted successfully'),
+                  action: SnackBarAction(
+                    label: localizations.translate('dismiss') ?? 'Dismiss',
+                    onPressed: () {
+                    },
+                  ),
+                ),
+              );
+
               Navigator.pop(context);
             }
           },
@@ -214,7 +225,7 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
                     actions: <Widget>[
                       TextButton(
                         onPressed: () {
-                          Navigator.of(context).pop(); // Close the dialog
+                          Navigator.of(context).pop();
                         },
                         child: Text(AppLocalizations.of(context)?.translate('cancel') ?? 'Cancel'),
                       ),
@@ -237,7 +248,7 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
             },
             child: Text(AppLocalizations.of(context)?.translate('delete') ?? 'Delete'),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red, // Color for the delete button
+              backgroundColor: Colors.red,
             ),
           ),
         ],
@@ -259,7 +270,7 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: Text(localizations.translate('ok') ?? 'OK'),
             ),
@@ -313,7 +324,7 @@ class _ReservationFormScreenState extends State<ReservationFormScreen> {
         SizedBox(width: 8.0),
         Expanded(
           child: Text(
-            '${date.toLocal()}'.split(' ')[0], // Format date as needed
+            '${date.toLocal()}'.split(' ')[0],
             style: TextStyle(fontSize: 16.0),
           ),
         ),

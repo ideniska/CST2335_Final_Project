@@ -76,6 +76,8 @@
   "appInstruction2": "Haga clic en la aplicación de cliente para agregar un nuevo cliente.",
   "appInstruction3": "Haga clic en la aplicación de lista de vuelos para agregar un nuevo vuelo.",
   "appInstruction4": "Haga clic en la aplicación de reservación para crear una nueva reservación basada en los clientes y vuelos disponibles.",
+  "submissionSuccess": "Reserva enviada con éxito",
+  "dismiss": "Descartar",
   "customerAdded": "Cliente agregado con éxito",
   "customerUpdated": "Cliente actualizado con éxito",
   "customerDeleted": "Cliente eliminado con éxito"

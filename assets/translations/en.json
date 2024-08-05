@@ -77,6 +77,8 @@
   "airplaneFormInstruction3": "Click add",
   "airplaneFormInstruction4": "Click add",
   "airplaneDetails": "Airplane details",
+  "submissionSuccess": "Reservation submitted successfully",
+  "dismiss": "Dismiss"
   "customerAdded": "Customer added successfully",
   "customerUpdated": "Customer updated successfully",
   "customerDeleted": "Customer deleted successfully"

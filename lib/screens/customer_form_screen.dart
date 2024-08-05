@@ -1,9 +1,10 @@
+import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/customer.dart';
 import '../providers/customer_provider.dart';
-import 'package:intl/intl.dart'; // For formatting the date
+import 'package:intl/intl.dart';
 import '../l10n/app_localizations.dart';
 
 /// A screen for adding or editing a customer.
@@ -20,6 +21,7 @@ class CustomerFormScreen extends StatefulWidget {
 
 class CustomerFormScreenState extends State<CustomerFormScreen> {
   final formKey = GlobalKey<FormState>();
+  final encryptedPrefs = EncryptedSharedPreferences();
   late String firstName;
   late String lastName;
   late String address;
@@ -61,11 +63,11 @@ class CustomerFormScreenState extends State<CustomerFormScreen> {
 
   /// Prompts the user to use previous customer data if available.
   ///
-  /// If previous customer data is available in [SharedPreferences], the user is prompted with a dialog
+  /// If previous customer data is available in [EncryptedSharedPreferences], the user is prompted with a dialog
   /// this allows to reuse the data
   Future<void> promptUsePreviousData() async {
-    final prefs = await SharedPreferences.getInstance();
-    if (prefs.containsKey('firstName')) {
+    final firstName = await encryptedPrefs.getString('firstName');
+    if (firstName != null) {
       bool useData = await showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -85,12 +87,12 @@ class CustomerFormScreenState extends State<CustomerFormScreen> {
       );
 
       if (useData) {
-        setState(() {
-          firstName = prefs.getString('firstName') ?? '';
-          lastName = prefs.getString('lastName') ?? '';
-          address = prefs.getString('address') ?? '';
-          birthday = DateTime.parse(prefs.getString('birthday') ?? DateTime.now().toString());
-          firstNameController.text = firstName;
+        setState(() async {
+          this.firstName = firstName;
+          lastName = await encryptedPrefs.getString('lastName') ?? '';
+          address = await encryptedPrefs.getString('address') ?? '';
+          birthday = DateTime.parse(await encryptedPrefs.getString('birthday') ?? DateTime.now().toString());
+          firstNameController.text = this.firstName;
           lastNameController.text = lastName;
           addressController.text = address;
           birthdayController.text = DateFormat.yMd().format(birthday);
@@ -100,13 +102,12 @@ class CustomerFormScreenState extends State<CustomerFormScreen> {
   }
 
 
-  /// Saves the given [Customer] data to [SharedPreferences].
+  /// Saves the given [Customer] data to [EncryptedSharedPreferences].
   Future<void> saveCustomerData(Customer customer) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('firstName', customer.firstName);
-    await prefs.setString('lastName', customer.lastName);
-    await prefs.setString('address', customer.address);
-    await prefs.setString('birthday', customer.birthday.toIso8601String());
+    await encryptedPrefs.setString('firstName', customer.firstName);
+    await encryptedPrefs.setString('lastName', customer.lastName);
+    await encryptedPrefs.setString('address', customer.address);
+    await encryptedPrefs.setString('birthday', customer.birthday.toIso8601String());
   }
 
   @override
@@ -118,8 +119,8 @@ class CustomerFormScreenState extends State<CustomerFormScreen> {
       appBar: AppBar(
         title: Text(isEditing ? localizations.translate('editCustomer') ?? 'Edit Customer' : localizations.translate('addCustomer') ?? 'Add Customer'),
       ),
-      body: SingleChildScrollView(  // <-- Added SingleChildScrollView
-        child: Padding(  // <-- Added Padding
+      body: SingleChildScrollView(
+        child: Padding(
           padding: EdgeInsets.all(16.0),
           child: Form(
             key: formKey,
@@ -214,6 +215,12 @@ class CustomerFormScreenState extends State<CustomerFormScreen> {
       await Provider.of<CustomerProvider>(context, listen: false).addCustomer(newCustomer);
       await saveCustomerData(newCustomer);
       Navigator.of(context).pop();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.translate('customerAdded') ?? 'Customer added successfully'),
+        ),
+      );
     }
   }
 
@@ -233,11 +240,23 @@ class CustomerFormScreenState extends State<CustomerFormScreen> {
       await Provider.of<CustomerProvider>(context, listen: false).updateCustomer(updatedCustomer);
       await saveCustomerData(updatedCustomer);
       Navigator.of(context).pop();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.translate('customerUpdated') ?? 'Customer updated successfully'),
+        ),
+      );
     }
   }
   /// Deletes the customer from the provider.
   void deleteCustomer() async {
     await Provider.of<CustomerProvider>(context, listen: false).deleteCustomer(widget.customer!.id!);
     Navigator.of(context).pop();
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(AppLocalizations.of(context)!.translate('customerDeleted') ?? 'Customer deleted successfully'),
+      ),
+    );
   }
 }
